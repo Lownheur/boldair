@@ -1,0 +1,4 @@
+-- Schéma
+
+DROP SCHEMA IF EXISTS boldair CASCADE;
+CREATE SCHEMA boldair;

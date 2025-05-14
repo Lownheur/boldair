@@ -1,0 +1,15 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-StartWebServer<boldair>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "boldair.StartWebServer",
+      "projectName": "boldair",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env",
+      "encoding": "CP850"
+    },
+  ]
+}

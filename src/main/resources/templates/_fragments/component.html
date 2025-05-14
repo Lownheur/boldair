@@ -1,0 +1,183 @@
+<!--  -->
+<!-- Fragment Message d'alerte -->
+<!-- -->
+<div th:fragment="alert" id="_alert_wrapper" th:if="${alert != null}"
+  class="w-100 px-2 fixed-top start-50 translate-middle-x" style="top: 3.5rem; max-width: 32rem;">
+  <div class="w-100 border-2 alert alert-dismissible fade show text-center" th:classappend="'alert-'+${alert.color}"
+    role="alert">
+    <th:block th:utext="${alert.html}"> </th:block>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" data-bs-target="#centered_alert_conainer">
+    </button>
+    <script>
+      // Fermeture automatique après un délai
+      var divAlert = $('#_alert_wrapper');
+      setTimeout(() => {
+        divAlert.hide();
+      }, "5000");
+    </script>
+  </div>
+</div> <!-- Fin Fragment Message d'alerte -->
+
+
+<!-- -->
+<!-- Fragment Boîte modale de confirmation -->
+<!-- -->
+<div th:fragment="confirm" class="modal fade text-center" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="w-100 modal-title">Confirmez-vous ?<br>
+          <strong>xxxx</strong>
+        </h5>
+      </div>
+      <div class="modal-footer" data-th-field="*{object_variable_name}">
+        <form id="formDelete" method="post">
+          <button type="button" class="btn-ok btn btn-primary px-4">OK</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    var divModal = $('script').last().parent();
+    function show_modal_confirm(html, params, executeAction) {
+      var modal = new bootstrap.Modal(divModal.get(0));
+      divModal.find('.modal-title').html(html);
+      divModal.find('.btn-ok').click(function () {
+        executeAction(params);
+        modal.hide();
+      });
+      modal.show();
+    }
+  </script>
+</div> <!-- Fin Fragment Boîte modale de confirmation -->
+
+
+<!-- -->
+<!-- Fragment Gestion de la suppression -->
+<!-- -->
+<th:block th:fragment="confirm_delete(url_delete, view_content)">
+  <th:block th:replace="~{this :: confirm}"></th:block>
+  <script>
+    function confirm_delete(source) {
+      var id = source.getAttribute('data-id');
+      var name = source.getAttribute('data-name');
+      var html = "Confirmez-vous la suppression ?<br><strong>" + name + "</strong>";
+      var params = { 'id': id };
+      show_modal_confirm(html, params, function () {
+        $.post("[[${url_delete}]]", { "id": params.id }).done(function (html) {
+          $("[[${view_content}]]").replaceWith(html);
+        })
+      });
+    }
+  </script>
+</th:block> <!-- Fin Fragment Gestion de la suppression -->
+
+
+<!-- -->
+<!-- Fragment Panneau de contrôle de la liste -->
+<!-- -->
+<form th:fragment="list_control_panel( url_new, pagingName )" action="" method="post"
+  th:with="flag_search=not ${#strings.isEmpty(pagingName)},pagingName=${flag_search}?${pagingName}:'x'">
+  <div class="row mx-auto gy-2 gx-0" th:object="${__${pagingName}__}">
+
+    <!-- Barre de recherche -->
+    <div th:if="${flag_search}" class="col-10 col-xl-8">
+      <div class="input-group">
+        <input type="search" th:field="*{search}" class="form-control" placeholder="🔍 Rechercher"
+          aria-label="Rechercher" autofocus>
+        <button type="button" onclick=" $('#search').val('');submit();" title="Effacer"
+          class="input-group-text  btn-link">
+          <i class="bi-x-lg"></i></button>
+        <button type="submit" title="Rechercher" class="btn btn-secondary">
+          <i class="bi-search"></i></button>
+      </div>
+    </div>
+
+    <!-- Bouton Ajouter -->
+    <div th:classappend="${flag_search ? 'col-2 col-xl-4' : 'col-12'}" class="d-flex justify-content-end">
+      <a th:href="${url_new}" title="Ajouter" class="btn btn-primary fw-bold px-3"><i class="bi-plus-lg"></i></a>
+    </div>
+
+  </div> <!-- Fin row -->
+</form> <!-- Fin Fragment Panneau de contrôle de la liste -->
+
+
+<!-- -->
+<!-- Fragment Barre de navigation entre les pages -->
+<!-- -->
+<nav th:fragment="paging_navbar(url_content, pagingName, view_content, flag_pageSize )" aria-label="Pagination"
+  th:object="${__${pagingName}__}" th:if="${totalPages > 0}" class="d-flex flex-wrap justify-content-center">
+
+  <style>
+    .page-item.disabled a {
+      color: silver;
+    }
+  </style>
+  <ul class="pagination mb-2">
+    <li class="page-item" th:classappend="*{pageNum == 1} ? 'disabled'">
+      <a th:replace="~{this :: paging_item(1, 'bi-rewind-fill', 'Première page')}">
+        &lt;&lt;</a>
+    </li>
+    <li class="page-item font-weight-bold" th:classappend="*{pageNum == 1} ? 'disabled'">
+      <a th:replace="~{this :: paging_item(*{pageNum - 1}, 'bi-caret-left-fill', 'Page précédente')}">
+        &lt;</a>
+    </li>
+    <li class="page-item" th:if="*{pageNum} > 4 and ${totalPages} > 7">
+      <a class="page-link px-2 bi-three-dots"></a>
+    </li>
+    <th:block
+      th:with="pagingStart=( 5 > *{pageNum} or 8 > ${totalPages} ? 1 : (*{pageNum} > ${totalPages} -4 ? ${totalPages} - 5 :*{pageNum} - 2))">
+      <th:block
+        th:with="pagingEnd=(*{pageNum} + 4 > ${totalPages} or 8 > ${totalPages} ? ${totalPages} : (*{pageNum} > 3 ? *{pageNum} + 2 : 6 ))">
+        <li class="page-item" th:classappend="${page} == *{pageNum} ? 'active'"
+          th:each="page : ${#numbers.sequence(pagingStart, pagingEnd )}">
+          <a th:replace="~{this :: paging_item(${page}, ${page}, 'Page ' + ${page})}">3</a>
+        </li>
+      </th:block>
+    </th:block>
+    <li class="page-item" th:if="${totalPages} > *{pageNum} + 3 and ${totalPages} > 7 ">
+      <a class="page-link px-2 bi-three-dots"></i></a>
+    </li>
+    <li class="page-item font-weight-bold" th:classappend="*{pageNum} == ${totalPages} ? 'disabled'">
+      <a th:replace="~{this :: paging_item(*{pageNum + 1},'bi-caret-right-fill', 'Page suivante')}">&gt;</a>
+    </li>
+    <li class="page-item" th:classappend="*{pageNum} == ${totalPages} ? 'disabled'">
+      <a th:replace="~{this :: paging_item(${totalPages}, 'bi-fast-forward-fill', 'Dernière page')}">&gt;&gt;</a>
+    </li>
+  </ul>
+  <!-- Sélecteur lignes/page -->
+  <div th:if="${flag_pageSize}" class="col-7 col-xl-2  ms-3">
+    <form action="" method="post">
+      <div class="input-group">
+        <span class="input-group-text d-xl-none">Lignes / page :</span>
+        <select name="pageSize" th:value="*{pageSize}" onchange="submit()" title="Lignes / page" class="form-select"
+          style="max-width: 4.5rem;">
+          <option value="5" th:selected="*{5 == pageSize}">5</option>
+          <option value="10" th:selected="*{10 == pageSize}">10</option>
+          <option value="15" th:selected="*{15 == pageSize}">15</option>
+          <option value="25" th:selected="*{25 == pageSize}">25</option>
+          <option value="50" th:selected="*{50 == pageSize}">50</option>
+        </select>
+      </div>
+    </form>
+  </div>
+  <script>
+    function paging_go_to_page(pageNum) {
+      $.post("[[${url_content}]]", { "pageNum": pageNum }).done(function (html) {
+        $("[[${view_content}]]").replaceWith(html);
+      })
+    }
+  </script>
+</nav> <!-- Fin Fragment Barre de navigation entre les pages -->
+
+
+<!-- -->
+<!-- Fragment item de la barre de navigation entre les pages -->
+<!-- -->
+<th:block th:fragment="paging_item(page, label, tooltip)" th:with="flagIcon=${#strings.startsWith(label,'bi-')}">
+  <a th:data-page="${page}" onclick="paging_go_to_page(this.getAttribute('data-page'))" class="page-link"
+    th:classappend="${flagIcon}?'px-2 ' + ${label}:''" style="cursor: pointer;">
+    <th:block th:unless="${flagIcon}" th:text="${label}"></th:block>
+  </a>
+</th:block> <!-- Fin Fragment item de la barre de navigation entre les pages -->
