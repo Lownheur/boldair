@@ -35,6 +35,9 @@ public class ServiceSecurity implements UserDetailsService {
 		if ( compte.isRoleAdmin() ) {
 			roles.add( "ADMIN" );
 		}
+		if ( compte.isRoleBenevol() ) {
+			roles.add( "BENEVOL" );
+		}
 
 		UserDetails userDetails = User.withUsername( compte.getPseudo() ).password( compte.getEmpreinteMdp() )
 				.roles( roles.toArray( new String[] {} ) ).build();

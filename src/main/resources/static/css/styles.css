@@ -6,10 +6,14 @@
 
 /* Variables CSS */
 :root {
-  --primary-color: #0EBFE9;    /* Bleu turquoise */
-  --primary-dark: #0A96B9;     /* Bleu turquoise foncé */
-  --secondary-color: #0B3A8D;  /* Bleu marine */
-  --accent-color: #FFD600;     /* Jaune */
+  --primary-color: #0EBFE9;
+  /* Bleu turquoise */
+  --primary-dark: #0A96B9;
+  /* Bleu turquoise foncé */
+  --secondary-color: #0B3A8D;
+  /* Bleu marine */
+  --accent-color: #FFD600;
+  /* Jaune */
   --white: #FFFFFF;
   --light-gray: #F5F5F5;
   --medium-gray: #E0E0E0;
@@ -18,10 +22,10 @@
   --success: #4CAF50;
   --error: #F44336;
   --warning: #FFC107;
-  
+
   --font-heading: 'Montserrat', sans-serif;
   --font-body: 'Open Sans', sans-serif;
-  
+
   --border-radius: 8px;
   --transition-speed: 0.3s;
 }
@@ -413,9 +417,17 @@ main {
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.03); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.03);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .btn-primary:hover {
@@ -460,13 +472,13 @@ main {
     flex-direction: column;
     gap: 10px;
   }
-  
+
   .nav-menu {
     flex-wrap: wrap;
     justify-content: center;
   }
-  
+
   .col {
     flex: 0 0 100%;
   }
-} 
+}

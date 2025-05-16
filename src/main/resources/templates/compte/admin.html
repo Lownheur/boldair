@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administration - Le Bol d'Air</title>
-    <link rel="stylesheet" th:href="@{/css/maquette-styles.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <!-- Include the centralized header fragment -->
-    <header th:replace="~{_fragments/header :: header('admin')}"></header>
+    <!-- Include the centralized header fragment with the admin tab active -->
+    <div th:replace="~{_fragments/header :: header('admin')}"></div>
 
     <main>
         <div class="container">

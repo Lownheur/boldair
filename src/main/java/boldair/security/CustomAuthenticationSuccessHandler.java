@@ -22,6 +22,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     private SimpleUrlAuthenticationSuccessHandler userSuccessHandler = 
         new SimpleUrlAuthenticationSuccessHandler("/compte/utilisateur");
     
+    private SimpleUrlAuthenticationSuccessHandler benevolSuccessHandler = 
+        new SimpleUrlAuthenticationSuccessHandler("/compte/benevol");
+    
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, 
             Authentication authentication) throws IOException, ServletException {
@@ -33,9 +36,14 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 adminSuccessHandler.onAuthenticationSuccess(request, response, authentication);
                 return;
             }
+            
+            if (authority.getAuthority().equals("ROLE_BENEVOL")) {
+                benevolSuccessHandler.onAuthenticationSuccess(request, response, authentication);
+                return;
+            }
         }
         
-        // Default to user page if not admin
+        // Default to user page if not admin or benevol
         userSuccessHandler.onAuthenticationSuccess(request, response, authentication);
     }
 } 

@@ -57,6 +57,12 @@ public class WebCompte {
 	public String adminDashboard() {
 		return "compte/admin";
 	}
+	
+	@GetMapping("/benevol")
+	@RolesAllowed("BENEVOL")
+	public String benevolDashboard() {
+		return "compte/benevol";
+	}
 
 	// -------
 	// Endpoints

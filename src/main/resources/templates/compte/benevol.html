@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Bénévole - Le Bol d'Air</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+</head>
+<body>
+    <!-- Include header fragment with active tab set to 'benevol' -->
+    <div th:replace="~{_fragments/header :: header('benevol')}"></div>
+    
+    <main>
+        <div class="container">
+            <h1 class="page-title">Espace Bénévole</h1>
+            
+            <div class="card">
+                <h2 class="card-heading">Bienvenue sur votre espace bénévole</h2>
+                <p>Vous êtes connecté en tant que bénévole pour Le Bol d'Air.</p>
+                
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="card">
+                            <h3 class="card-heading">Mes missions</h3>
+                            <p>Consultez vos missions assignées et leur statut.</p>
+                            <a href="#" class="btn btn-primary mt-2">Voir mes missions</a>
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="card">
+                            <h3 class="card-heading">Calendrier des événements</h3>
+                            <p>Consultez les prochains événements et inscrivez-vous.</p>
+                            <a href="#" class="btn btn-primary mt-2">Voir le calendrier</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="card">
+                            <h3 class="card-heading">Mon profil</h3>
+                            <p>Modifiez vos informations personnelles et vos préférences.</p>
+                            <a href="#" class="btn btn-outline mt-2">Modifier mon profil</a>
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="card">
+                            <h3 class="card-heading">Statistiques</h3>
+                            <p>Consultez vos statistiques de bénévolat.</p>
+                            <div class="alert alert-success">
+                                Votre contribution actuelle: <span class="badge badge-accent">12 heures</span> ce mois-ci
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Le Bol d'Air - Tous droits réservés</p>
+        </div>
+    </footer>
+</body>
+</html>

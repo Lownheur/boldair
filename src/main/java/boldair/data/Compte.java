@@ -26,5 +26,6 @@ public class Compte {
 	private String	empreinteMdp;
 	private String	email;
 	private boolean	roleAdmin;
+	private boolean roleBenevol;
 
 }

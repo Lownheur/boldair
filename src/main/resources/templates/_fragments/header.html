@@ -34,13 +34,18 @@
                         <a th:href="@{/compte/admin}" class="nav-btn" th:classappend="${activeTab == 'admin'} ? 'active'">Administration</a>
                     </li>
                     
-                    <!-- Only shown to authenticated users with USER role (not ADMIN) -->
-                    <li sec:authorize="hasRole('USER') and !hasRole('ADMIN')">
+                    <!-- Only shown to authenticated users with USER role (not ADMIN and not BENEVOL) -->
+                    <li sec:authorize="hasRole('USER') and !hasRole('ADMIN') and !hasRole('BENEVOL')">
                         <a th:href="@{/compte/utilisateur}" class="nav-btn" th:classappend="${activeTab == 'utilisateur'} ? 'active'">Mon espace</a>
                     </li>
                     
+                    <!-- Only shown to authenticated users with BENEVOL role -->
+                    <li sec:authorize="hasRole('BENEVOL')">
+                        <a th:href="@{/compte/benevol}" class="nav-btn" th:classappend="${activeTab == 'benevol'} ? 'active'">Espace Bénévole</a>
+                    </li>
+                    
                     <!-- Logout button for authenticated users -->
-                    <li sec:authorize="hasAnyRole('USER', 'ADMIN')" class="logout-btn">
+                    <li sec:authorize="hasAnyRole('USER', 'ADMIN', 'BENEVOL')" class="logout-btn">
                         <form th:action="@{/logout}" method="post" style="display: inline;">
                             <button type="submit" class="btn btn-primary btn-sm">Déconnexion</button>
                         </form>
