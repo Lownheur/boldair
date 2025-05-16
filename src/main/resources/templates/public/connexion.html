@@ -54,48 +54,19 @@
                             
                             <div class="text-center mb-3">
                                 <a th:href="@{/forgot-password}" class="btn-link">Mot de passe oublié ?</a>
-          </div>
+                            </div>
                             
                             <hr class="mb-3">
                             
                             <div class="text-center">
                                 <p class="mb-2">Vous n'avez pas encore de compte ?</p>
                                 <a th:href="@{/inscription}" class="btn btn-outline btn-block">Créer un compte</a>
-          </div>
-                        </form>
-        </div>
-
-                    <div class="card mt-4">
-                        <h2 class="card-heading">Accès rapide aux comptes de démonstration</h2>
-                        <p class="mb-3">Pour tester les différents rôles :</p>
-                        
-                        <div class="mb-3">
-                            <div class="row mb-2">
-                                <div class="col">
-                                    <span class="badge badge-primary">Participant</span>
-          </div>
-          <div class="col">
-                                    <button onclick="fillDemoCredentials('participant@exemple.com', 'participant')" class="btn btn-secondary btn-block">Remplir formulaire</button>
-            </div>
-          </div>
-                            <p class="small-text">Email: participant@exemple.com<br>Mot de passe: participant</p>
-        </div>
-
-                        <div>
-                            <div class="row mb-2">
-                                <div class="col">
-                                    <span class="badge badge-secondary">Administrateur</span>
-          </div>
-          <div class="col">
-                                    <button onclick="fillDemoCredentials('admin@exemple.com', 'admin')" class="btn btn-secondary btn-block">Remplir formulaire</button>
-                                </div>
                             </div>
-                            <p class="small-text">Email: admin@exemple.com<br>Mot de passe: admin</p>
-                        </div>
+                        </form>
                     </div>
                 </div>
                 <div class="col"></div>
-          </div>
+            </div>
         </div>
     </main>
 
@@ -106,11 +77,5 @@
     </footer>
 
     <script th:src="@{/js/script.js}"></script>
-    <script>
-        function fillDemoCredentials(username, password) {
-            document.getElementById('username').value = username;
-            document.getElementById('password').value = password;
-        }
-    </script>
 </body>
 </html>

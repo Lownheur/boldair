@@ -19,6 +19,73 @@
                 <h2 class="card-heading">Bienvenue sur votre espace bénévole</h2>
                 <p>Vous êtes connecté en tant que bénévole pour Le Bol d'Air.</p>
                 
+                <!-- Première rangée: Profil et Rôles -->
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="card">
+                            <h3 class="card-heading">Mon profil</h3>
+                            
+                            <!-- Profile Information Section -->
+                            <div class="profile-info">
+                                <table class="profile-table">
+                                    <tr>
+                                        <th>Pseudo:</th>
+                                        <td th:text="${compte.pseudo}">pseudo</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Nom:</th>
+                                        <td th:text="${benevol.nom}">nom</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Prénom:</th>
+                                        <td th:text="${benevol.prénom}">prénom</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Email:</th>
+                                        <td th:text="${benevol.email}">email</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Téléphone:</th>
+                                        <td th:text="${benevol.téléphone}">téléphone</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Statut:</th>
+                                        <td th:text="${benevol.statut}">statut</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Type:</th>
+                                        <td th:text="${benevol.interneExterne != null ? (benevol.interneExterne ? 'Interne' : 'Externe') : 'Non défini'}">type</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                            <a href="#" class="btn btn-outline mt-2">Modifier mon profil</a>
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="card">
+                            <h3 class="card-heading">Vos rôles</h3>
+                            <div class="roles-info">
+                                <div class="role-item">
+                                    <div class="role-name">Signaleur</div>
+                                    <div class="role-description">Assurer la sécurité et guider les participants sur le parcours</div>
+                                    <div class="badge badge-primary">Course principale</div>
+                                </div>
+                                
+                                <div class="role-item">
+                                    <div class="role-name">Accueil</div>
+                                    <div class="role-description">Distribution des dossards et information des participants</div>
+                                    <div class="badge badge-secondary">Avant-course</div>
+                                </div>
+                            </div>
+                            
+                            <a href="#" class="btn btn-outline mt-2">Voir tous mes rôles</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Deuxième rangée: Missions et Calendrier -->
                 <div class="row mt-4">
                     <div class="col">
                         <div class="card">
@@ -32,27 +99,29 @@
                         <div class="card">
                             <h3 class="card-heading">Calendrier des événements</h3>
                             <p>Consultez les prochains événements et inscrivez-vous.</p>
-                            <a href="#" class="btn btn-primary mt-2">Voir le calendrier</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="row mt-4">
-                    <div class="col">
-                        <div class="card">
-                            <h3 class="card-heading">Mon profil</h3>
-                            <p>Modifiez vos informations personnelles et vos préférences.</p>
-                            <a href="#" class="btn btn-outline mt-2">Modifier mon profil</a>
-                        </div>
-                    </div>
-                    
-                    <div class="col">
-                        <div class="card">
-                            <h3 class="card-heading">Statistiques</h3>
-                            <p>Consultez vos statistiques de bénévolat.</p>
-                            <div class="alert alert-success">
-                                Votre contribution actuelle: <span class="badge badge-accent">12 heures</span> ce mois-ci
+                            
+                            <!-- Upcoming Events List -->
+                            <div class="events-list">
+                                <div class="event-item">
+                                    <div class="event-date">27 Nov 2025</div>
+                                    <div class="event-title">Course du Bol d'Air - Campus</div>
+                                    <div class="event-status">Inscription ouverte</div>
+                                </div>
+                                
+                                <div class="event-item">
+                                    <div class="event-date">12 Dec 2025</div>
+                                    <div class="event-title">Réunion des bénévoles</div>
+                                    <div class="event-status">À venir</div>
+                                </div>
+                                
+                                <div class="event-item">
+                                    <div class="event-date">15 Jan 2026</div>
+                                    <div class="event-title">Formation - Gestion des parcours</div>
+                                    <div class="event-status">À venir</div>
+                                </div>
                             </div>
+                            
+                            <a href="#" class="btn btn-primary mt-2">Voir le calendrier</a>
                         </div>
                     </div>
                 </div>

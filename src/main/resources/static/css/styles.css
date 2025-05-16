@@ -237,6 +237,7 @@ main {
 
 .btn-primary:hover {
   background-color: var(--primary-dark);
+  border: 1px solid var(--primary-dark);
 }
 
 .btn-secondary {
@@ -464,6 +465,122 @@ main {
 .maquette-btn:hover {
   background-color: var(--primary-color);
   transform: translateY(-2px);
+}
+
+/* Profile styles */
+.profile-info {
+  margin-bottom: 15px;
+}
+
+.profile-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+}
+
+.profile-table th,
+.profile-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--medium-gray);
+}
+
+.profile-table th {
+  font-weight: 600;
+  color: var(--secondary-color);
+  width: 40%;
+}
+
+.profile-table tr:last-child th,
+.profile-table tr:last-child td {
+  border-bottom: none;
+}
+
+.profile-table tr:hover {
+  background-color: var(--light-gray);
+}
+
+.maquette-nav {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+/* Events list styles */
+.events-list {
+  margin-bottom: 15px;
+}
+
+.event-item {
+  padding: 10px;
+  border-bottom: 1px solid var(--medium-gray);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.event-item:last-child {
+  border-bottom: none;
+}
+
+.event-date {
+  font-weight: 600;
+  color: var(--secondary-color);
+  font-size: 0.9rem;
+}
+
+.event-title {
+  font-weight: 600;
+}
+
+.event-status {
+  font-size: 0.9rem;
+  color: var(--dark-gray);
+}
+
+.event-item:hover {
+  background-color: var(--light-gray);
+}
+
+/* Roles styles */
+.roles-info {
+  margin-bottom: 15px;
+}
+
+.role-item {
+  padding: 12px;
+  border-bottom: 1px solid var(--medium-gray);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 10px;
+  border-radius: var(--border-radius);
+}
+
+.role-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.role-name {
+  font-weight: 700;
+  color: var(--secondary-color);
+  font-size: 1.1rem;
+}
+
+.role-description {
+  margin-bottom: 8px;
+  color: var(--dark-gray);
+}
+
+.role-item:hover {
+  background-color: var(--light-gray);
+}
+
+.role-item .badge {
+  align-self: flex-start;
 }
 
 /* Responsive */

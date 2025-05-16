@@ -2,6 +2,8 @@ package boldair.web;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import boldair.dao.DaoBenevol;
 import boldair.dao.DaoCompte;
+import boldair.data.Benevol;
 import boldair.data.Compte;
 import boldair.util.Alert;
 import boldair.util.Paging;
@@ -30,8 +34,9 @@ public class WebCompte {
 	// Composants injectés
 	// -------
 
-	private final DaoCompte			daoCompte;
-	private final PasswordEncoder	encoder;
+	private final DaoCompte daoCompte;
+	private final DaoBenevol daoBenevol;
+	private final PasswordEncoder encoder;
 
 	// -------
 	// Attributs de session
@@ -60,7 +65,21 @@ public class WebCompte {
 	
 	@GetMapping("/benevol")
 	@RolesAllowed("BENEVOL")
-	public String benevolDashboard() {
+	public String benevolDashboard(Model model) {
+		// Get the current authenticated user
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String username = auth.getName();
+		
+		// Find the compte by username (pseudo)
+		Compte compte = daoCompte.findByPseudo(username);
+		
+		// Find the benevol associated with the compte
+		Benevol benevol = daoBenevol.findByCompteId(compte.getIdCompte());
+		
+		// Add benevol to the model to use in the view
+		model.addAttribute("benevol", benevol);
+		model.addAttribute("compte", compte);
+		
 		return "compte/benevol";
 	}
 
