@@ -33,5 +33,21 @@ public class WebPublic {
 	public String quiSommesNous() {
 		return "public/qui-sommes-nous";
 	}
+	
+	// -------
+	// inscription()
+	
+	@GetMapping( "/inscription" )
+	public String inscription() {
+		return "public/inscription";
+	}
+	
+	// -------
+	// classement()
+	
+	@GetMapping( "/classement" )
+	public String classement() {
+		return "public/classement";
+	}
 
 }

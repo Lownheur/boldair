@@ -1,38 +1,133 @@
-<!doctype html>
-<html th:with="tabTitle='Accueil'" lang="fr">
-
-<head th:replace="~{_fragments/layout :: head(${tabTitle})}">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../../static/css/styles.css" />
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil - Le Bol d'Air</title>
+    <link rel="stylesheet" th:href="@{/css/maquette-styles.css}">
 </head>
-
 <body>
+    <!-- Include the centralized header fragment -->
+    <header th:replace="~{_fragments/header :: header('home')}"></header>
 
-  <!-- -->
-  <!-- En-tête de page - barre de navigation -->
-  <!-- -->
-  <header th:replace="~{_fragments/layout :: header }"></header>
+    <main>
+        <div class="container">
+            <h1 class="page-title">Bienvenue au Bol d'Air 2025</h1>
+            
+            <div class="card mb-4">
+                <h2 class="card-heading">L'événement sportif de l'année</h2>
+                <div class="row">
+                    <div class="col">
+                        <p class="mb-3">Le <strong>Bol d'Air</strong> est un triathlon combinant trois disciplines sportives exigeantes :</p>
+                        <ul class="mb-3">
+                            <li class="icon-text mb-2">
+                                <span class="icon">🚵</span>
+                                <span>VTT sur 27km</span>
+                            </li>
+                            <li class="icon-text mb-2">
+                                <span class="icon">🛶</span>
+                                <span>Canoë sur 8km</span>
+                            </li>
+                            <li class="icon-text mb-2">
+                                <span class="icon">🏃</span>
+                                <span>Course à pied sur 9km</span>
+                            </li>
+                        </ul>
+                        <p class="mb-3">Venez participer à cette expérience unique en pleine nature, dans un esprit de dépassement de soi et de convivialité.</p>
+                    </div>
+                    <div class="col">
+                        <div class="card" style="background-color: var(--light-gray);">
+                            <h3 class="card-heading">Édition 2025</h3>
+                            <p class="mb-2"><strong>Date :</strong> Septembre 2025</p>
+                            <p class="mb-2"><strong>Lieu :</strong> Lac de Vassivière, Limousin</p>
+                            <p class="mb-2"><strong>Catégories :</strong> Grand Bol (complet), Mini Bol (2 épreuves), Découverte (1 épreuve)</p>
+                            <div class="icon-text mb-2">
+                                <span class="icon">📅</span>
+                                <span>Inscriptions ouvertes jusqu'au 31 juillet 2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="card">
+                        <h2 class="card-heading">Bol d'Air</h2>
+                        <div class="icon-text mb-2">
+                            <span class="icon">🏆</span>
+                            <span>Épreuve complète</span>
+                        </div>
+                        <ul class="mb-3">
+                            <li>VTT : 27km</li>
+                            <li>Canoë : 8km</li>
+                            <li>Course : 9km</li>
+                        </ul>
+                        <span class="badge badge-accent mb-3">Ouvert aux +16 ans</span>
+                        <a th:href="@{/inscription}" class="btn btn-primary btn-block">S'inscrire</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <h2 class="card-heading">Mini Bol</h2>
+                        <div class="icon-text mb-2">
+                            <span class="icon">🥈</span>
+                            <span>2 disciplines au choix</span>
+                        </div>
+                        <p class="mb-3">Choisissez deux disciplines parmi les trois proposées pour une expérience adaptée à votre niveau.</p>
+                        <span class="badge badge-accent mb-3">Ouvert aux +14 ans</span>
+                        <a th:href="@{/inscription}" class="btn btn-primary btn-block">S'inscrire</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <h2 class="card-heading">Découverte</h2>
+                        <div class="icon-text mb-2">
+                            <span class="icon">🥉</span>
+                            <span>1 discipline au choix</span>
+                        </div>
+                        <p class="mb-3">Participez à l'une des trois disciplines proposées pour vous initier à l'événement.</p>
+                        <span class="badge badge-accent mb-3">Ouvert à tous</span>
+                        <a th:href="@{/inscription}" class="btn btn-primary btn-block">S'inscrire</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-heading">Accès rapide</h2>
+                <div class="row">
+                    <div class="col">
+                        <div class="icon-text mb-3">
+                            <span class="icon">👥</span>
+                            <span>Déjà inscrit ?</span>
+                        </div>
+                        <a th:href="@{/login}" class="btn btn-secondary btn-block mb-3">Se connecter</a>
+                    </div>
+                    <div class="col">
+                        <div class="icon-text mb-3">
+                            <span class="icon">🏆</span>
+                            <span>Consulter les résultats</span>
+                        </div>
+                        <a th:href="@{/classement}" class="btn btn-secondary btn-block mb-3">Voir les classements</a>
+                    </div>
+                    <div class="col">
+                        <div class="icon-text mb-3">
+                            <span class="icon">🧑‍💼</span>
+                            <span>Devenir bénévole</span>
+                        </div>
+                        <a th:href="@{/inscription}" class="btn btn-outline btn-block mb-3">Nous rejoindre</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-  <!-- -->
-  <!-- Contenu de la page -->
-  <!-- -->
-  <section class="container my-3">
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Le Bol d'Air. Tous droits réservés.</p>
+        </div>
+    </footer>
 
-    <div class="col-12 col-sm-6 my-3 mx-auto text-center">
-      <img class="img-fluid" th:src="@{/img/boldair.jpg}" style="max-width: 320px;">
-    </div> <!-- Fin Colonne 2 -->
-
-  </section> <!-- Fin Contenu de la page -->
-
-  <!-- -->
-  <!-- Pied de page -->
-  <!-- -->
-  <footer th:replace="~{_fragments/layout :: footer}"> </footer>
-
-  <!-- Scripts définis dans le layout -->
-  <th:block th:replace="~{_fragments/layout :: bottom-scripts}"></th:block>
-
+    <script th:src="@{/js/script.js}"></script>
 </body>
-
-</html>
+</html> 

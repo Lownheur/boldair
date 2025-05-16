@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Participant - Le Bol d'Air</title>
+    <link rel="stylesheet" th:href="@{/css/maquette-styles.css}">
+    <style>
+        /* Styles spécifiques à la page utilisateur pour améliorer la cohérence et le centrage */
+        .user-profile {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        
+        .user-icon {
+            font-size: 2.5rem;
+        }
+        
+        .user-name {
+            margin: 0.5rem 0;
+            color: var(--dark-color);
+        }
+        
+        .user-category {
+            color: var(--gray-color);
+            margin-bottom: 0;
+        }
+        
+        .menu-list {
+            padding: 0.5rem;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            color: var(--dark-color);
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            transition: background-color 0.3s;
+        }
+        
+        .menu-item:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .menu-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .menu-item .icon {
+            margin-right: 0.75rem;
+        }
+        
+        .card-footer {
+            background-color: var(--light-gray);
+            padding: 1rem;
+            border-radius: 0 0 0.5rem 0.5rem;
+        }
+        
+        .status-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .info-box {
+            display: flex;
+            background-color: var(--light-gray);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+        
+        .info-icon {
+            font-size: 1.75rem;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
+        }
+        
+        .info-content {
+            flex: 1;
+        }
+        
+        .info-content strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            color: var(--dark-color);
+        }
+        
+        .info-content p {
+            margin: 0;
+            color: var(--gray-color);
+        }
+        
+        .progress-container {
+            margin: 1.5rem 0;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress {
+            height: 0.75rem;
+            background-color: var(--light-gray);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 1rem;
+        }
+        
+        .team-section {
+            border: 1px solid var(--light-gray);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .team-header {
+            padding: 1rem;
+            background-color: var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .team-title {
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+        
+        .team-category {
+            color: var(--gray-color);
+        }
+        
+        .team-members {
+            padding: 0.5rem;
+        }
+        
+        .team-member {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .team-member:last-child {
+            border-bottom: none;
+        }
+        
+        .user-avatar.sm {
+            width: 40px;
+            height: 40px;
+            margin: 0 1rem 0 0;
+        }
+        
+        .user-icon.sm {
+            font-size: 1.5rem;
+        }
+        
+        .member-info {
+            flex: 1;
+        }
+        
+        .member-name {
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+        
+        .member-role {
+            color: var(--gray-color);
+            font-size: 0.875rem;
+        }
+        
+        .checklist {
+            padding: 0.5rem;
+        }
+        
+        .checklist-item {
+            display: flex;
+            padding: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+            align-items: flex-start;
+        }
+        
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+        
+        .checklist-status {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .checklist-content {
+            flex: 1;
+        }
+        
+        .checklist-content strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            color: var(--dark-color);
+        }
+        
+        .checklist-content p {
+            margin: 0 0 0.5rem;
+            color: var(--gray-color);
+        }
+        
+        .checklist-item.complete .checklist-content strong {
+            color: var(--success-color);
+        }
+        
+        .checklist-item.active .checklist-content strong {
+            color: var(--warning-color);
+        }
+        
+        .accordion {
+            border: 1px solid var(--light-gray);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .accordion-item {
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .accordion-item:last-child {
+            border-bottom: none;
+        }
+        
+        .accordion-header {
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background-color: var(--light-gray);
+        }
+        
+        .accordion-header h3 {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--dark-color);
+        }
+        
+        .accordion-icon {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .accordion-content {
+            padding: 1rem;
+            background-color: white;
+        }
+        
+        .list {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        
+        .list li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .list li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .text-xl {
+            font-size: 1.75rem;
+            font-weight: bold;
+        }
+
+        /* Ajustements pour meilleur centrage */
+        .form-actions {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .text-muted {
+            color: var(--gray-color);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        
+        .badge-success {
+            background-color: var(--light-green);
+            color: var(--success-color);
+        }
+        
+        .badge-warning {
+            background-color: var(--light-yellow);
+            color: var(--warning-color);
+        }
+        
+        .badge-error {
+            background-color: var(--light-red);
+            color: var(--error-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Include the centralized header fragment -->
+    <header th:replace="~{_fragments/header :: header('utilisateur')}"></header>
+
+    <main>
+        <div class="container">
+            <h1 class="page-title">Mon espace participant</h1>
+            
+            <div class="row mb-4">
+                <div class="col-4">
+                    <div class="card">
+                        <div class="user-profile text-center">
+                            <div class="user-avatar">
+                                <span class="user-icon">👤</span>
+                            </div>
+                            <h2 class="user-name">Jean Dupont</h2>
+                            <p class="user-category">Participant - Bol d'Air</p>
+                        </div>
+                        
+                        <div class="menu-list">
+                            <a href="#" class="menu-item active">
+                                <span class="icon">📋</span>
+                                <span>Mon inscription</span>
+                            </a>
+                            <a href="#" class="menu-item">
+                                <span class="icon">📝</span>
+                                <span>Mes documents</span>
+                            </a>
+                            <a href="#" class="menu-item">
+                                <span class="icon">📊</span>
+                                <span>Mes résultats</span>
+                            </a>
+                            <a href="#" class="menu-item">
+                                <span class="icon">🛠️</span>
+                                <span>Paramètres du compte</span>
+                            </a>
+                        </div>
+                        
+                        <div class="card-footer">
+                            <div class="status-info">
+                                <div class="status-label">Statut de l'inscription :</div>
+                                <div class="status-value">
+                                    <span class="badge badge-warning">En cours de validation</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-8">
+                    <div class="card mb-4">
+                        <h2 class="card-heading">Informations d'inscription</h2>
+                        
+                        <div class="info-box mb-3">
+                            <div class="info-icon">📅</div>
+                            <div class="info-content">
+                                <strong>Le Bol d'Air 2025</strong>
+                                <p>15 septembre 2025 - Départ à 10h00</p>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Inscription complète à 75%</span>
+                                <span>3/4 étapes</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="tabs mb-4 mt-4">
+                            <button class="tab-btn active">Équipe</button>
+                            <button class="tab-btn">Documents</button>
+                            <button class="tab-btn">Paiement</button>
+                            <button class="tab-btn">Confirmation</button>
+                        </div>
+                        
+                        <div class="tab-content">
+                            <h3>Votre équipe</h3>
+                            
+                            <div class="team-section mb-4">
+                                <div class="team-header">
+                                    <div class="team-title">Équipe "Les Foulées Vertes"</div>
+                                    <div class="team-category">Catégorie : Mixte</div>
+                                </div>
+                                
+                                <div class="team-members">
+                                    <div class="team-member">
+                                        <div class="user-avatar sm">
+                                            <span class="user-icon sm">👤</span>
+                                        </div>
+                                        <div class="member-info">
+                                            <div class="member-name">Jean Dupont</div>
+                                            <div class="member-role">Capitaine</div>
+                                        </div>
+                                        <div class="member-status">
+                                            <span class="badge badge-warning">Certificat en attente</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="team-member">
+                                        <div class="user-avatar sm">
+                                            <span class="user-icon sm">👤</span>
+                                        </div>
+                                        <div class="member-info">
+                                            <div class="member-name">Sophie Martin</div>
+                                            <div class="member-role">Membre</div>
+                                        </div>
+                                        <div class="member-status">
+                                            <span class="badge badge-success">Confirmé</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="team-member">
+                                        <div class="user-avatar sm">
+                                            <span class="user-icon sm">👤</span>
+                                        </div>
+                                        <div class="member-info">
+                                            <div class="member-name">Luc Petit</div>
+                                            <div class="member-role">Membre</div>
+                                        </div>
+                                        <div class="member-status">
+                                            <span class="badge badge-success">Confirmé</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <form class="form">
+                                <h4>Modifier les informations de l'équipe</h4>
+                                
+                                <div class="form-group">
+                                    <label for="team-name" class="form-label">Nom de l'équipe</label>
+                                    <input type="text" id="team-name" class="form-input" value="Les Foulées Vertes">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="team-category" class="form-label">Catégorie</label>
+                                    <select id="team-category" class="form-select">
+                                        <option value="mixte" selected>Mixte</option>
+                                        <option value="homme">Hommes</option>
+                                        <option value="femme">Femmes</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="team-level" class="form-label">Niveau estimé</label>
+                                    <select id="team-level" class="form-select">
+                                        <option value="débutant">Débutant</option>
+                                        <option value="intermédiaire" selected>Intermédiaire</option>
+                                        <option value="confirmé">Confirmé</option>
+                                        <option value="expert">Expert</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h2 class="card-heading">Prochaines étapes</h2>
+                        
+                        <div class="checklist">
+                            <div class="checklist-item complete">
+                                <div class="checklist-status">✅</div>
+                                <div class="checklist-content">
+                                    <strong>Inscription de l'équipe</strong>
+                                    <p>Vous avez créé votre équipe avec succès.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="checklist-item complete">
+                                <div class="checklist-status">✅</div>
+                                <div class="checklist-content">
+                                    <strong>Invitation des coéquipiers</strong>
+                                    <p>Vos coéquipiers ont rejoint l'équipe.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="checklist-item active">
+                                <div class="checklist-status">⏳</div>
+                                <div class="checklist-content">
+                                    <strong>Documents à fournir</strong>
+                                    <p>Votre certificat médical est en attente de validation.</p>
+                                    <button class="btn btn-outline btn-sm">Téléverser le document</button>
+                                </div>
+                            </div>
+                            
+                            <div class="checklist-item">
+                                <div class="checklist-status">⭕</div>
+                                <div class="checklist-content">
+                                    <strong>Paiement de l'inscription</strong>
+                                    <p>Frais d'inscription: 60€ pour l'équipe.</p>
+                                    <button class="btn btn-primary btn-sm">Procéder au paiement</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="info-box mt-3" style="background-color: var(--light-yellow);">
+                            <div class="info-icon">ℹ️</div>
+                            <div class="info-content">
+                                <strong>Date limite:</strong>
+                                <p>Vous avez jusqu'au 31 juillet 2025 pour compléter votre inscription.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <h2 class="card-heading">Informations pratiques</h2>
+                
+                <div class="row">
+                    <div class="col">
+                        <div class="info-box">
+                            <div class="info-icon">📍</div>
+                            <div class="info-content">
+                                <strong>Lieu de l'événement</strong>
+                                <p>Complexe sportif du Parc, 15 avenue des Sports, 87000 Limoges</p>
+                                <a href="#" class="btn btn-outline btn-sm mt-2">Voir sur la carte</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="info-box">
+                            <div class="info-icon">⏱️</div>
+                            <div class="info-content">
+                                <strong>Horaires importants</strong>
+                                <ul class="list">
+                                    <li>Retrait des dossards: 8h00 - 9h30</li>
+                                    <li>Briefing: 9h45</li>
+                                    <li>Départ: 10h00</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="info-box">
+                            <div class="info-icon">📝</div>
+                            <div class="info-content">
+                                <strong>Documents à prévoir</strong>
+                                <ul class="list">
+                                    <li>Pièce d'identité</li>
+                                    <li>Confirmation d'inscription</li>
+                                    <li>Certificat médical (si non fourni en ligne)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-heading">Questions fréquentes</h2>
+                
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <h3>Puis-je modifier la composition de mon équipe ?</h3>
+                            <span class="accordion-icon">+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Oui, vous pouvez modifier la composition de votre équipe jusqu'à 15 jours avant l'événement. Pour cela, rendez-vous dans la section "Équipe" de votre espace participant.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <h3>Comment récupérer mon dossard ?</h3>
+                            <span class="accordion-icon">+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Les dossards pourront être récupérés la veille de l'événement de 14h à 18h ou le jour même de 8h à 9h30. Vous devrez présenter une pièce d'identité et votre confirmation d'inscription.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <h3>Que faire en cas de désistement ?</h3>
+                            <span class="accordion-icon">+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>En cas de désistement avant le 1er août 2025, vous pouvez demander un remboursement partiel (70% des frais d'inscription). Après cette date, aucun remboursement ne sera possible.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="#" class="btn btn-outline">Voir toutes les FAQ</a>
+                    <a href="#" class="btn btn-primary">Contacter l'organisation</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">        <div class="container">            <p>© 2025 Le Bol d'Air. Tous droits réservés.</p>        </div>    </footer>    <script th:src="@{/js/script.js}"></script>
+</body>
+</html> 

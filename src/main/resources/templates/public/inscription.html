@@ -1,0 +1,238 @@
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org" lang="fr"><head>    <meta charset="UTF-8">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Inscription - Le Bol d'Air</title>    <link rel="stylesheet" th:href="@{/css/maquette-styles.css}"></head><body>    <header th:replace="~{_fragments/header :: header('inscription')}"></header>
+
+    <main>
+        <div class="container">
+            <h1 class="page-title">Inscription</h1>
+            
+            <div class="card mb-4">
+                <h2 class="card-heading">Type d'inscription</h2>
+                <div class="row mb-3">
+                    <div class="col">
+                        <div class="checkbox-wrapper">
+                            <input type="radio" id="participant" name="type" class="form-checkbox" checked>
+                            <label for="participant">Participant à l'épreuve</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="checkbox-wrapper">
+                            <input type="radio" id="benevole" name="type" class="form-checkbox">
+                            <label for="benevole">Bénévole</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="participant-form" class="card mb-4">
+                <h2 class="card-heading">Formulaire d'inscription - Participant</h2>
+                
+                <div class="alert alert-warning mb-3">
+                    <div class="icon-text">
+                        <span class="icon">ℹ️</span>
+                        <span>Les champs marqués d'un astérisque (*) sont obligatoires.</span>
+                    </div>
+                </div>
+                
+                <form>
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="mb-3">Informations personnelles</h3>
+                            
+                            <div class="form-group">
+                                <label for="nom" class="form-label">Nom *</label>
+                                <input type="text" id="nom" class="form-input" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="prenom" class="form-label">Prénom *</label>
+                                <input type="text" id="prenom" class="form-input" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email *</label>
+                                <input type="email" id="email" class="form-input" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="telephone" class="form-label">Téléphone *</label>
+                                <input type="tel" id="telephone" class="form-input" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="naissance" class="form-label">Date de naissance *</label>
+                                <input type="date" id="naissance" class="form-input" required>
+                            </div>
+                        </div>
+                        
+                        <div class="col">
+                            <h3 class="mb-3">Informations sur l'épreuve</h3>
+                            
+                            <div class="form-group">
+                                <label for="categorie" class="form-label">Catégorie *</label>
+                                <select id="categorie" class="form-select" required>
+                                    <option value="">Sélectionnez une catégorie</option>
+                                    <option value="bol">Bol d'Air (complet)</option>
+                                    <option value="mini">Mini Bol (2 épreuves)</option>
+                                    <option value="decouverte">Découverte (1 épreuve)</option>
+                                </select>
+                            </div>
+                            
+                            <div id="disciplines" class="form-group">
+                                <label class="form-label">Disciplines (Mini Bol / Découverte) *</label>
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="vtt" class="form-checkbox">
+                                    <label for="vtt">VTT</label>
+                                </div>
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="canoe" class="form-checkbox">
+                                    <label for="canoe">Canoë</label>
+                                </div>
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="course" class="form-checkbox">
+                                    <label for="course">Course à pied</label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="equipe" class="form-label">Nom d'équipe (optionnel)</label>
+                                <input type="text" id="equipe" class="form-input">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="licence" class="form-label">Numéro de licence (optionnel)</label>
+                                <input type="text" id="licence" class="form-input">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col">
+                            <h3 class="mb-3">Paiement</h3>
+                            
+                            <div class="card mb-3" style="background-color: var(--light-gray);">
+                                <h4 class="mb-2">Tarifs</h4>
+                                <p class="mb-2">• Bol d'Air (complet) : 45€</p>
+                                <p class="mb-2">• Mini Bol (2 épreuves) : 35€</p>
+                                <p class="mb-2">• Découverte (1 épreuve) : 20€</p>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="paiement" class="form-label">Méthode de paiement *</label>
+                                <select id="paiement" class="form-select" required>
+                                    <option value="">Sélectionnez une méthode</option>
+                                    <option value="cb">Carte bancaire</option>
+                                    <option value="virement">Virement bancaire</option>
+                                    <option value="cheque">Chèque</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col">
+                            <h3 class="mb-3">Conditions et validation</h3>
+                            
+                            <div class="checkbox-wrapper mb-3">
+                                <input type="checkbox" id="conditions" class="form-checkbox" required>
+                                <label for="conditions">J'accepte les conditions générales *</label>
+                            </div>
+                            
+                            <div class="checkbox-wrapper mb-3">
+                                <input type="checkbox" id="certificat" class="form-checkbox" required>
+                                <label for="certificat">Je m'engage à fournir un certificat médical avant l'épreuve *</label>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-block">Valider mon inscription</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div id="benevole-form" class="card mb-4" style="display: none;">
+                <h2 class="card-heading">Formulaire d'inscription - Bénévole</h2>
+                
+                <div class="alert alert-success mb-3">
+                    <div class="icon-text">
+                        <span class="icon">🧑‍💼</span>
+                        <span>Merci de vous porter volontaire pour l'organisation du Bol d'Air !</span>
+                    </div>
+                </div>
+                
+                <form>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="nom-benevole" class="form-label">Nom *</label>
+                                <input type="text" id="nom-benevole" class="form-input" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="prenom-benevole" class="form-label">Prénom *</label>
+                                <input type="text" id="prenom-benevole" class="form-input" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email-benevole" class="form-label">Email *</label>
+                                <input type="email" id="email-benevole" class="form-input" required>
+                            </div>
+                        </div>
+                        
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="tel-benevole" class="form-label">Téléphone *</label>
+                                <input type="tel" id="tel-benevole" class="form-input" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="dispo" class="form-label">Disponibilités *</label>
+                                <select id="dispo" class="form-select" required>
+                                    <option value="">Sélectionnez votre disponibilité</option>
+                                    <option value="complet">Jour complet</option>
+                                    <option value="matin">Matin uniquement</option>
+                                    <option value="aprem">Après-midi uniquement</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="role" class="form-label">Rôle souhaité</label>
+                                <select id="role" class="form-select">
+                                    <option value="">Sans préférence</option>
+                                    <option value="accueil">Accueil et logistique</option>
+                                    <option value="parcours">Balisage et sécurité parcours</option>
+                                    <option value="ravito">Ravitaillement</option>
+                                    <option value="chrono">Chronométrage</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="commentaire" class="form-label">Commentaires</label>
+                        <textarea id="commentaire" class="form-textarea" rows="3"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block">Soumettre ma candidature</button>
+                </form>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-heading">Informations complémentaires</h2>
+                <p class="mb-2">Pour toute question concernant l'inscription, vous pouvez nous contacter :</p>
+                <div class="icon-text mb-2">
+                    <span class="icon">📧</span>
+                    <span>contact@boldair2025.fr</span>
+                </div>
+                <div class="icon-text">
+                    <span class="icon">📞</span>
+                    <span>06 xx xx xx xx</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Le Bol d'Air. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script th:src="@{/js/script.js}"></script>
+</body>
+</html> 

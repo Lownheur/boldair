@@ -22,9 +22,8 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-@RolesAllowed( "ADMIN" )
-@RequestMapping( "/compte" )
-@SessionAttributes( "pagingCompte" )
+@RequestMapping("/compte")
+@SessionAttributes("pagingCompte")
 public class WebCompte {
 
 	// -------
@@ -39,8 +38,24 @@ public class WebCompte {
 	// -------
 
 	@ModelAttribute
-	public Paging getPaging( @ModelAttribute( "pagingCompte" ) Paging paging ) {
+	public Paging getPaging(@ModelAttribute("pagingCompte") Paging paging) {
 		return paging;
+	}
+
+	// -------
+	// User and Admin Dashboards
+	// -------
+
+	@GetMapping("/utilisateur")
+	@RolesAllowed("USER")
+	public String userDashboard() {
+		return "compte/utilisateur";
+	}
+
+	@GetMapping("/admin")
+	@RolesAllowed("ADMIN")
+	public String adminDashboard() {
+		return "compte/admin";
 	}
 
 	// -------
@@ -50,20 +65,21 @@ public class WebCompte {
 	// -------
 	// listContent()
 
-	@PostMapping( "/list/content" )
-	public String getListContent( Paging paging, Model model ) {
+	@PostMapping("/list/content")
+	@RolesAllowed("ADMIN")
+	public String getListContent(Paging paging, Model model) {
 
-		var page = getPage( paging );
+		var page = getPage(paging);
 
 		// Si la n° de page demandé est > au nombre total, on affiche la dernière page 
-		if ( paging.getPageNum() > page.getTotalPages() && page.getTotalPages() > 0 ) {
-			paging.setPageNum( page.getTotalPages() );
-			page = getPage( paging );
+		if (paging.getPageNum() > page.getTotalPages() && page.getTotalPages() > 0) {
+			paging.setPageNum(page.getTotalPages());
+			page = getPage(paging);
 		}
 
-		model.addAttribute( "list", page.getContent() );
-		model.addAttribute( "totalItems", page.getTotalElements() );
-		model.addAttribute( "totalPages", page.getTotalPages() );
+		model.addAttribute("list", page.getContent());
+		model.addAttribute("totalItems", page.getTotalElements());
+		model.addAttribute("totalPages", page.getTotalPages());
 		return "compte/list :: #dynamic_view";
 
 	}
@@ -71,10 +87,11 @@ public class WebCompte {
 	// -------
 	// list() - GET
 
-	@GetMapping( "/list" )
-	public String list( Paging paging, Model model ) {
+	@GetMapping("/list")
+	@RolesAllowed("ADMIN")
+	public String list(Paging paging, Model model) {
 
-		getListContent( paging, model );
+		getListContent(paging, model);
 		return "compte/list";
 
 	}
@@ -82,7 +99,8 @@ public class WebCompte {
 	// -------
 	// list() - POST
 
-	@PostMapping( "/list" )
+	@PostMapping("/list")
+	@RolesAllowed("ADMIN")
 	public String list() {
 		return "redirect:/compte/list";
 	}
@@ -90,17 +108,18 @@ public class WebCompte {
 	// -------
 	// edit()
 
-	@GetMapping( path = "/form" )
-	public String edit( Long id, Model model ) {
+	@GetMapping(path = "/form")
+	@RolesAllowed("ADMIN")
+	public String edit(Long id, Model model) {
 
 		Compte item;
-		if ( id == null ) {
+		if (id == null) {
 			item = new Compte();
 		} else {
-			item = daoCompte.findById( id ).get();
+			item = daoCompte.findById(id).get();
 		}
 
-		model.addAttribute( "item", item );
+		model.addAttribute("item", item);
 		return "compte/form";
 
 	}
@@ -108,28 +127,29 @@ public class WebCompte {
 	// -------
 	// save()
 
-	@PostMapping( "/form" )
+	@PostMapping("/form")
+	@RolesAllowed("ADMIN")
 	public String save(
-			@ModelAttribute( "item" ) Compte item,
+			@ModelAttribute("item") Compte item,
 			BindingResult result,
-			RedirectAttributes ra ) {
+			RedirectAttributes ra) {
 
-		if ( !daoCompte.verifierUnicitePseudo( item.getPseudo(), item.getIdCompte() ) ) {
-			result.rejectValue( "pseudo", "", "Ce pseudo est déjà utilisé" );
+		if (!daoCompte.verifierUnicitePseudo(item.getPseudo(), item.getIdCompte())) {
+			result.rejectValue("pseudo", "", "Ce pseudo est déjà utilisé");
 		}
-		if ( !daoCompte.verifierUniciteEmail( item.getEmail(), item.getIdCompte() ) ) {
-			result.rejectValue( "email", "", "Cet e-mail  est déjà utilisé" );
+		if (!daoCompte.verifierUniciteEmail(item.getEmail(), item.getIdCompte())) {
+			result.rejectValue("email", "", "Cet e-mail  est déjà utilisé");
 		}
-		if ( result.hasErrors() ) {
+		if (result.hasErrors()) {
 			return "compte/form";
 		}
 
-		if ( !item.getMotDePasse().isBlank() ) {
-			item.setEmpreinteMdp( encoder.encode( item.getMotDePasse() ) );
+		if (!item.getMotDePasse().isBlank()) {
+			item.setEmpreinteMdp(encoder.encode(item.getMotDePasse()));
 		}
-		daoCompte.save( item );
+		daoCompte.save(item);
 
-		ra.addFlashAttribute( "alert", new Alert( Alert.Color.SUCCESS, "Mise à jour effectuée avec succès" ) );
+		ra.addFlashAttribute("alert", new Alert(Alert.Color.SUCCESS, "Mise à jour effectuée avec succès"));
 		return "redirect:/compte/list";
 
 	}
@@ -137,12 +157,13 @@ public class WebCompte {
 	// -------
 	// listContent()
 
-	@PostMapping( "/delete" )
-	public String delete( Long id, Paging paging, Model model ) {
+	@PostMapping("/delete")
+	@RolesAllowed("ADMIN")
+	public String delete(Long id, Paging paging, Model model) {
 
-		daoCompte.deleteById( id );
-		model.addAttribute( "alert", new Alert( Alert.Color.SUCCESS, "Suppression effectuée avec succès" ) );
-		return getListContent( paging, model );
+		daoCompte.deleteById(id);
+		model.addAttribute("alert", new Alert(Alert.Color.SUCCESS, "Suppression effectuée avec succès"));
+		return getListContent(paging, model);
 
 	}
 
@@ -150,16 +171,16 @@ public class WebCompte {
 	// Méthodes auxiliaires
 	// ------
 
-	private Page<Compte> getPage( Paging paging ) {
+	private Page<Compte> getPage(Paging paging) {
 
-		var pageable = PageRequest.of( paging.getPageNum() - 1, paging.getPageSize() );
+		var pageable = PageRequest.of(paging.getPageNum() - 1, paging.getPageSize());
 
 		Page<Compte> page;
-		if ( paging.getSearch() == null ) {
-			page = daoCompte.findAllByOrderByPseudo( pageable );
+		if (paging.getSearch() == null) {
+			page = daoCompte.findAllByOrderByPseudo(pageable);
 		} else {
 			page = daoCompte.findByPseudoContainingIgnoreCaseOrEmailContainingIgnoreCaseOrderByPseudo(
-					paging.getSearch(), paging.getSearch(), pageable );
+					paging.getSearch(), paging.getSearch(), pageable);
 		}
 
 		return page;

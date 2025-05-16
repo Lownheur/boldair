@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - Le Bol d'Air</title>
+    <link rel="stylesheet" th:href="@{/css/maquette-styles.css}">
+</head>
+<body>
+    <!-- Include the centralized header fragment -->
+    <header th:replace="~{_fragments/header :: header('admin')}"></header>
+
+    <main>
+        <div class="container">
+            <h1 class="page-title">Panneau d'administration</h1>
+            
+            <div class="card mb-4">
+                <h2 class="card-heading">Tableau de bord</h2>
+                <div class="row">
+                    <div class="col">
+                        <div class="card" style="background-color: var(--light-gray);">
+                            <h3 class="card-heading">Participants</h3>
+                            <div class="row mb-2">
+                                <div class="col">
+                                    <div class="icon-text">
+                                        <span class="icon">👥</span>
+                                        <span><strong>245</strong> inscrits</span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="icon-text">
+                                        <span class="icon">⚠️</span>
+                                        <span><strong>12</strong> dossiers en attente</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card" style="background-color: var(--light-gray);">
+                            <h3 class="card-heading">Bénévoles</h3>
+                            <div class="row mb-2">
+                                <div class="col">
+                                    <div class="icon-text">
+                                        <span class="icon">🧑‍💼</span>
+                                        <span><strong>38</strong> volontaires</span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="icon-text">
+                                        <span class="icon">⚠️</span>
+                                        <span><strong>5</strong> à affecter</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card" style="background-color: var(--light-gray);">
+                            <h3 class="card-heading">Événement</h3>
+                            <div class="icon-text mb-2">
+                                <span class="icon">📅</span>
+                                <span><strong>J-45</strong> avant le Bol d'Air</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <h2 class="card-heading">Gestion des participants</h2>
+                
+                <div class="row mb-3">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="categorie-filter" class="form-label">Catégorie</label>
+                            <select id="categorie-filter" class="form-select">
+                                <option value="">Toutes les catégories</option>
+                                <option value="bol">Bol d'Air</option>
+                                <option value="mini">Mini Bol</option>
+                                <option value="decouverte">Découverte</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="statut-filter" class="form-label">Statut</label>
+                            <select id="statut-filter" class="form-select">
+                                <option value="">Tous les statuts</option>
+                                <option value="complet">Dossier complet</option>
+                                <option value="attente">En attente</option>
+                                <option value="paiement">Paiement à confirmer</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="search" class="form-label">Rechercher</label>
+                            <input type="text" id="search" class="form-input" placeholder="Nom, prénom, email...">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Catégorie</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Dupont</td>
+                                <td>Jean</td>
+                                <td>Bol d'Air</td>
+                                <td><span class="badge badge-success">Complet</span></td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm">Éditer</button>
+                                    <button class="btn btn-secondary btn-sm">Détails</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Martin</td>
+                                <td>Sophie</td>
+                                <td>Mini Bol</td>
+                                <td><span class="badge badge-warning">Certificat manquant</span></td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm">Éditer</button>
+                                    <button class="btn btn-secondary btn-sm">Détails</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Petit</td>
+                                <td>Thomas</td>
+                                <td>Découverte</td>
+                                <td><span class="badge badge-error">Paiement en attente</span></td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm">Éditer</button>
+                                    <button class="btn btn-secondary btn-sm">Détails</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Leblanc</td>
+                                <td>Marie</td>
+                                <td>Bol d'Air</td>
+                                <td><span class="badge badge-success">Complet</span></td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm">Éditer</button>
+                                    <button class="btn btn-secondary btn-sm">Détails</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Moreau</td>
+                                <td>Paul</td>
+                                <td>Mini Bol</td>
+                                <td><span class="badge badge-success">Complet</span></td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm">Éditer</button>
+                                    <button class="btn btn-secondary btn-sm">Détails</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="text-center mt-3">
+                    <button class="btn btn-primary">Ajouter un participant</button>
+                    <button class="btn btn-secondary">Exporter les données</button>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="card">
+                        <h2 class="card-heading">Gestion des bénévoles</h2>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Rôle</th>
+                                        <th>Disponibilité</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Dubois Alice</td>
+                                        <td>Accueil</td>
+                                        <td>Jour complet</td>
+                                        <td>
+                                            <button class="btn btn-outline btn-sm">Modifier</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Leroy Michel</td>
+                                        <td>Sécurité</td>
+                                        <td>Matin</td>
+                                        <td>
+                                            <button class="btn btn-outline btn-sm">Modifier</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Girard Julie</td>
+                                        <td>Ravitaillement</td>
+                                        <td>Jour complet</td>
+                                        <td>
+                                            <button class="btn btn-outline btn-sm">Modifier</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-center mt-3">
+                            <button class="btn btn-primary">Affecter les rôles</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <h2 class="card-heading">Gestion des classements</h2>
+                        <div class="form-group">
+                            <label for="result-category" class="form-label">Catégorie</label>
+                            <select id="result-category" class="form-select">
+                                <option value="bol">Bol d'Air</option>
+                                <option value="mini">Mini Bol</option>
+                                <option value="decouverte">Découverte</option>
+                            </select>
+                        </div>
+                        
+                        <div class="table-responsive mb-3">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Pos.</th>
+                                        <th>Nom</th>
+                                        <th>Temps</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Équipe Alpha</td>
+                                        <td>2h15m30s</td>
+                                        <td>
+                                            <button class="btn btn-outline btn-sm">Modifier</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Équipe Bravo</td>
+                                        <td>2h18m45s</td>
+                                        <td>
+                                            <button class="btn btn-outline btn-sm">Modifier</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Équipe Charlie</td>
+                                        <td>2h22m10s</td>
+                                        <td>
+                                            <button class="btn btn-outline btn-sm">Modifier</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button class="btn btn-primary">Mettre à jour les résultats</button>
+                            <button class="btn btn-secondary">Publier les classements</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-heading">Paramètres de l'événement</h2>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="event-date" class="form-label">Date de l'événement</label>
+                            <input type="date" id="event-date" class="form-input" value="2025-09-15">
+                        </div>
+                        <div class="form-group">
+                            <label for="inscription-limit" class="form-label">Date limite d'inscription</label>
+                            <input type="date" id="inscription-limit" class="form-input" value="2025-07-31">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="max-participants" class="form-label">Nombre maximum de participants</label>
+                            <input type="number" id="max-participants" class="form-input" value="300">
+                        </div>
+                        <div class="form-group">
+                            <label for="event-status" class="form-label">Statut des inscriptions</label>
+                            <select id="event-status" class="form-select">
+                                <option value="open">Ouvertes</option>
+                                <option value="closed">Fermées</option>
+                                <option value="soon">Bientôt ouvertes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <button class="btn btn-primary">Enregistrer les modifications</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">        <div class="container">            <p>© 2025 Le Bol d'Air. Tous droits réservés.</p>        </div>    </footer>    <script th:src="@{/js/script.js}"></script>
+</body>
+</html> 

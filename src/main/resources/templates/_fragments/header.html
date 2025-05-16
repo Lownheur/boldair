@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+</head>
+<body>
+    <!-- Fragment for the header -->
+    <header th:fragment="header(activeTab)" class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo-container">
+                    <img th:src="@{/img/logo.png}" alt="Logo Le Bol d'Air" class="logo">
+                    <span class="main-title">Le Bol d'Air</span>
+                </div>
+                <ul class="nav-menu">
+                    <!-- Common link for all users -->
+                    <li><a th:href="@{/}" class="nav-btn" th:classappend="${activeTab == 'home'} ? 'active'">Accueil</a></li>
+                    
+                    <!-- Only shown to anonymous users (not authenticated) -->
+                    <li sec:authorize="isAnonymous()">
+                        <a th:href="@{/inscription}" class="nav-btn" th:classappend="${activeTab == 'inscription'} ? 'active'">Inscription</a>
+                    </li>
+                    <li sec:authorize="isAnonymous()">
+                        <a th:href="@{/login}" class="nav-btn" th:classappend="${activeTab == 'login'} ? 'active'">Connexion</a>
+                    </li>
+                    
+                    <!-- Shown to all users (anonymous and authenticated) -->
+                    <li>
+                        <a th:href="@{/classement}" class="nav-btn" th:classappend="${activeTab == 'classement'} ? 'active'">Classement</a>
+                    </li>
+
+                    <!-- Only shown to users with ADMIN role -->
+                    <li sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{/compte/admin}" class="nav-btn" th:classappend="${activeTab == 'admin'} ? 'active'">Administration</a>
+                    </li>
+                    
+                    <!-- Only shown to authenticated users with USER role (not ADMIN) -->
+                    <li sec:authorize="hasRole('USER') and !hasRole('ADMIN')">
+                        <a th:href="@{/compte/utilisateur}" class="nav-btn" th:classappend="${activeTab == 'utilisateur'} ? 'active'">Mon espace</a>
+                    </li>
+                    
+                    <!-- Logout button for authenticated users -->
+                    <li sec:authorize="hasAnyRole('USER', 'ADMIN')" class="logout-btn">
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-primary btn-sm">Déconnexion</button>
+                        </form>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+</body>
+</html>

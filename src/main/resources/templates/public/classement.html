@@ -1,0 +1,302 @@
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org" lang="fr"><head>    <meta charset="UTF-8">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Classement - Le Bol d'Air</title>    <link rel="stylesheet" th:href="@{/css/maquette-styles.css}"></head><body>    <header th:replace="~{_fragments/header :: header('classement')}"></header>
+
+    <main>
+        <div class="container">
+            <h1 class="page-title">Classement</h1>
+            
+            <div class="card mb-4">
+                <h2 class="card-heading">Édition 2025</h2>
+                
+                <div class="tabs mb-3">
+                    <button class="tab-btn active">Bol d'Air</button>
+                    <button class="tab-btn">Mini Bol</button>
+                    <button class="tab-btn">Découverte</button>
+                </div>
+                
+                <div class="search-filter mb-3">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <input type="text" class="form-input" placeholder="Rechercher une équipe...">
+                            </div>
+                        </div>
+                        <div class="col text-right">
+                            <div class="btn-group">
+                                <button class="btn btn-outline active">Général</button>
+                                <button class="btn btn-outline">Par catégorie</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Position</th>
+                                <th>Équipe</th>
+                                <th>Catégorie</th>
+                                <th>Temps</th>
+                                <th>Écart</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="highlight">
+                                <td>1</td>
+                                <td>
+                                    <div class="team-info">
+                                        <span class="medal gold">🥇</span>
+                                        <div>
+                                            <strong>Les Foulées Vertes</strong>
+                                            <div class="team-members">A. Dupont, S. Martin, L. Petit</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Mixte</td>
+                                <td>2h 15m 30s</td>
+                                <td>-</td>
+                            </tr>
+                            <tr class="highlight">
+                                <td>2</td>
+                                <td>
+                                    <div class="team-info">
+                                        <span class="medal silver">🥈</span>
+                                        <div>
+                                            <strong>Les Rapides</strong>
+                                            <div class="team-members">M. Leroy, P. Dubois, J. Bernard</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Hommes</td>
+                                <td>2h 18m 45s</td>
+                                <td>+3m 15s</td>
+                            </tr>
+                            <tr class="highlight">
+                                <td>3</td>
+                                <td>
+                                    <div class="team-info">
+                                        <span class="medal bronze">🥉</span>
+                                        <div>
+                                            <strong>Endurance Team</strong>
+                                            <div class="team-members">E. Moreau, C. Lefebvre, N. Fournier</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Femmes</td>
+                                <td>2h 22m 10s</td>
+                                <td>+6m 40s</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>
+                                    <div class="team-info">
+                                        <div>
+                                            <strong>Les Marathoniens</strong>
+                                            <div class="team-members">R. Girard, T. Simon, H. Michel</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Hommes</td>
+                                <td>2h 25m 30s</td>
+                                <td>+10m 00s</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>
+                                    <div class="team-info">
+                                        <div>
+                                            <strong>Run4Fun</strong>
+                                            <div class="team-members">V. Laurent, G. Roux, D. Vincent</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Mixte</td>
+                                <td>2h 28m 15s</td>
+                                <td>+12m 45s</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>
+                                    <div class="team-info">
+                                        <div>
+                                            <strong>Les Gazelles</strong>
+                                            <div class="team-members">S. Mercier, A. Blanc, L. Guerin</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Femmes</td>
+                                <td>2h 30m 22s</td>
+                                <td>+14m 52s</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>
+                                    <div class="team-info">
+                                        <div>
+                                            <strong>Trail Aventure</strong>
+                                            <div class="team-members">B. Faure, C. Andre, R. Legrand</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Mixte</td>
+                                <td>2h 32m 47s</td>
+                                <td>+17m 17s</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>
+                                    <div class="team-info">
+                                        <div>
+                                            <strong>Les Sportifs</strong>
+                                            <div class="team-members">M. Robin, F. Roy, P. Gautier</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Hommes</td>
+                                <td>2h 35m 10s</td>
+                                <td>+19m 40s</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>
+                                    <div class="team-info">
+                                        <div>
+                                            <strong>Courir Ensemble</strong>
+                                            <div class="team-members">J. Chevalier, S. Denis, T. Marchand</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Mixte</td>
+                                <td>2h 38m 30s</td>
+                                <td>+23m 00s</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>
+                                    <div class="team-info">
+                                        <div>
+                                            <strong>Les Ambitieux</strong>
+                                            <div class="team-members">O. Durand, E. Lefevre, C. Perrin</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Hommes</td>
+                                <td>2h 40m 15s</td>
+                                <td>+24m 45s</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="pagination text-center mt-3">
+                    <button class="btn btn-outline btn-sm" disabled>&laquo; Précédent</button>
+                    <button class="btn btn-outline btn-sm active">1</button>
+                    <button class="btn btn-outline btn-sm">2</button>
+                    <button class="btn btn-outline btn-sm">3</button>
+                    <button class="btn btn-outline btn-sm">Suivant &raquo;</button>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <h2 class="card-heading">Statistiques</h2>
+                <div class="row">
+                    <div class="col">
+                        <div class="card" style="background-color: var(--light-gray);">
+                            <h3 class="card-heading">Participants</h3>
+                            <p class="text-xl text-center">245</p>
+                            <div class="text-center text-muted">Nombre total de participants</div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card" style="background-color: var(--light-gray);">
+                            <h3 class="card-heading">Temps moyen</h3>
+                            <p class="text-xl text-center">2h 45m</p>
+                            <div class="text-center text-muted">Temps moyen de parcours</div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card" style="background-color: var(--light-gray);">
+                            <h3 class="card-heading">Finishers</h3>
+                            <p class="text-xl text-center">98%</p>
+                            <div class="text-center text-muted">Taux de finishers</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-heading">Les éditions précédentes</h2>
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <h3 class="card-heading">2024</h3>
+                            <div class="podium mb-3">
+                                <div class="podium-place second">
+                                    <div class="podium-name">Team Runners</div>
+                                    <div class="podium-stand">2</div>
+                                </div>
+                                <div class="podium-place first">
+                                    <div class="podium-name">Victoire Racing</div>
+                                    <div class="podium-stand">1</div>
+                                </div>
+                                <div class="podium-place third">
+                                    <div class="podium-name">Les Montagnards</div>
+                                    <div class="podium-stand">3</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-outline btn-sm">Voir les résultats complets</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <h3 class="card-heading">2023</h3>
+                            <div class="podium mb-3">
+                                <div class="podium-place second">
+                                    <div class="podium-name">Les Rapides</div>
+                                    <div class="podium-stand">2</div>
+                                </div>
+                                <div class="podium-place first">
+                                    <div class="podium-name">Endurance Team</div>
+                                    <div class="podium-stand">1</div>
+                                </div>
+                                <div class="podium-place third">
+                                    <div class="podium-name">Les Champions</div>
+                                    <div class="podium-stand">3</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-outline btn-sm">Voir les résultats complets</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <h3 class="card-heading">2022</h3>
+                            <div class="podium mb-3">
+                                <div class="podium-place second">
+                                    <div class="podium-name">Les Sportifs</div>
+                                    <div class="podium-stand">2</div>
+                                </div>
+                                <div class="podium-place first">
+                                    <div class="podium-name">Run4Fun</div>
+                                    <div class="podium-stand">1</div>
+                                </div>
+                                <div class="podium-place third">
+                                    <div class="podium-name">Trail Aventure</div>
+                                    <div class="podium-stand">3</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-outline btn-sm">Voir les résultats complets</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">        <div class="container">            <p>© 2025 Le Bol d'Air. Tous droits réservés.</p>        </div>    </footer>    <script th:src="@{/js/script.js}"></script></body>
+</html> 
