@@ -43,5 +43,4 @@ out/
 
 ### Spécifique au projet ###
 **/db/*.lo1
-**/db/1b-tables.txt
-src/main/resources/application.properties
+
