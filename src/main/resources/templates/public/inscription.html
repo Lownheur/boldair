@@ -10,7 +10,7 @@
                     <div class="col">
                         <div class="checkbox-wrapper">
                             <input type="radio" id="participant" name="type" class="form-checkbox" checked>
-                            <label for="participant">Participant à l'épreuve</label>
+                            <label for="participant">Équipe</label>
                         </div>
                     </div>
                     <div class="col">
@@ -23,7 +23,7 @@
             </div>
             
             <div id="participant-form" class="card mb-4">
-                <h2 class="card-heading">Formulaire d'inscription - Participant</h2>
+                <h2 class="card-heading">Formulaire d'inscription - Équipe</h2>
                 
                 <div class="alert alert-warning mb-3">
                     <div class="icon-text">
@@ -33,19 +33,9 @@
                 </div>
                 
                 <form>
-                    <div class="row">
+                    <div class="row mb-4">
                         <div class="col">
-                            <h3 class="mb-3">Informations personnelles</h3>
-                            
-                            <div class="form-group">
-                                <label for="nom" class="form-label">Nom *</label>
-                                <input type="text" id="nom" class="form-input" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="prenom" class="form-label">Prénom *</label>
-                                <input type="text" id="prenom" class="form-input" required>
-                            </div>
+                            <h3 class="mb-3">Informations du compte</h3>
                             
                             <div class="form-group">
                                 <label for="email" class="form-label">Email *</label>
@@ -53,18 +43,9 @@
                             </div>
                             
                             <div class="form-group">
-                                <label for="telephone" class="form-label">Téléphone *</label>
-                                <input type="tel" id="telephone" class="form-input" required>
+                                <label for="equipe" class="form-label">Nom d'équipe *</label>
+                                <input type="text" id="equipe" class="form-input" required>
                             </div>
-                            
-                            <div class="form-group">
-                                <label for="naissance" class="form-label">Date de naissance *</label>
-                                <input type="date" id="naissance" class="form-input" required>
-                            </div>
-                        </div>
-                        
-                        <div class="col">
-                            <h3 class="mb-3">Informations sur l'épreuve</h3>
                             
                             <div class="form-group">
                                 <label for="categorie" class="form-label">Catégorie *</label>
@@ -76,56 +57,95 @@
                                 </select>
                             </div>
                             
-                            <div id="disciplines" class="form-group">
-                                <label class="form-label">Disciplines (Mini Bol / Découverte) *</label>
-                                <div class="checkbox-wrapper">
-                                    <input type="checkbox" id="vtt" class="form-checkbox">
-                                    <label for="vtt">VTT</label>
-                                </div>
-                                <div class="checkbox-wrapper">
-                                    <input type="checkbox" id="canoe" class="form-checkbox">
-                                    <label for="canoe">Canoë</label>
-                                </div>
-                                <div class="checkbox-wrapper">
-                                    <input type="checkbox" id="course" class="form-checkbox">
-                                    <label for="course">Course à pied</label>
-                                </div>
+                            <div class="form-group">
+                                <label for="password" class="form-label">Mot de passe *</label>
+                                <input type="password" id="password" class="form-input" required>
                             </div>
                             
                             <div class="form-group">
-                                <label for="equipe" class="form-label">Nom d'équipe (optionnel)</label>
-                                <input type="text" id="equipe" class="form-input">
+                                <label for="password-confirm" class="form-label">Confirmation mot de passe *</label>
+                                <input type="password" id="password-confirm" class="form-input" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col">
+                            <h3 class="mb-3">Participant 1</h3>
+                            
+                            <div class="form-group">
+                                <label for="nom1" class="form-label">Nom *</label>
+                                <input type="text" id="nom1" class="form-input" required>
                             </div>
                             
                             <div class="form-group">
-                                <label for="licence" class="form-label">Numéro de licence (optionnel)</label>
-                                <input type="text" id="licence" class="form-input">
+                                <label for="prenom1" class="form-label">Prénom *</label>
+                                <input type="text" id="prenom1" class="form-input" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="sexe1" class="form-label">Sexe *</label>
+                                <select id="sexe1" class="form-select" required>
+                                    <option value="">Sélectionnez</option>
+                                    <option value="homme">Homme</option>
+                                    <option value="femme">Femme</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="status1" class="form-label">Statut *</label>
+                                <select id="status1" class="form-select" required>
+                                    <option value="">Sélectionnez</option>
+                                    <option value="capitaine">Capitaine</option>
+                                    <option value="suiveur">Suiveur</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="naissance1" class="form-label">Date de naissance *</label>
+                                <input type="date" id="naissance1" class="form-input" required>
+                            </div>
+                        </div>
+                        
+                        <div class="col">
+                            <h3 class="mb-3">Participant 2</h3>
+                            
+                            <div class="form-group">
+                                <label for="nom2" class="form-label">Nom *</label>
+                                <input type="text" id="nom2" class="form-input" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="prenom2" class="form-label">Prénom *</label>
+                                <input type="text" id="prenom2" class="form-input" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="sexe2" class="form-label">Sexe *</label>
+                                <select id="sexe2" class="form-select" required>
+                                    <option value="">Sélectionnez</option>
+                                    <option value="homme">Homme</option>
+                                    <option value="femme">Femme</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="status2" class="form-label">Statut *</label>
+                                <select id="status2" class="form-select" required>
+                                    <option value="">Sélectionnez</option>
+                                    <option value="capitaine">Capitaine</option>
+                                    <option value="suiveur">Suiveur</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="naissance2" class="form-label">Date de naissance *</label>
+                                <input type="date" id="naissance2" class="form-input" required>
                             </div>
                         </div>
                     </div>
                     
                     <div class="row mt-3">
-                        <div class="col">
-                            <h3 class="mb-3">Paiement</h3>
-                            
-                            <div class="card mb-3" style="background-color: var(--light-gray);">
-                                <h4 class="mb-2">Tarifs</h4>
-                                <p class="mb-2">• Bol d'Air (complet) : 45€</p>
-                                <p class="mb-2">• Mini Bol (2 épreuves) : 35€</p>
-                                <p class="mb-2">• Découverte (1 épreuve) : 20€</p>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="paiement" class="form-label">Méthode de paiement *</label>
-                                <select id="paiement" class="form-select" required>
-                                    <option value="">Sélectionnez une méthode</option>
-                                    <option value="cb">Carte bancaire</option>
-                                    <option value="virement">Virement bancaire</option>
-                                    <option value="cheque">Chèque</option>
-                                </select>
-                            </div>
-                        </div>
-                        
                         <div class="col">
                             <h3 class="mb-3">Conditions et validation</h3>
                             
@@ -137,6 +157,11 @@
                             <div class="checkbox-wrapper mb-3">
                                 <input type="checkbox" id="certificat" class="form-checkbox" required>
                                 <label for="certificat">Je m'engage à fournir un certificat médical avant l'épreuve *</label>
+                            </div>
+                            
+                            <div class="checkbox-wrapper mb-3">
+                                <input type="checkbox" id="paiement" class="form-checkbox" required>
+                                <label for="paiement">Je m'engage à payer après mon inscription en ligne ou le jour de l'épreuve *</label>
                             </div>
                             
                             <button type="submit" class="btn btn-primary btn-block">Valider mon inscription</button>
@@ -181,31 +206,15 @@
                             </div>
                             
                             <div class="form-group">
-                                <label for="dispo" class="form-label">Disponibilités *</label>
-                                <select id="dispo" class="form-select" required>
-                                    <option value="">Sélectionnez votre disponibilité</option>
-                                    <option value="complet">Jour complet</option>
-                                    <option value="matin">Matin uniquement</option>
-                                    <option value="aprem">Après-midi uniquement</option>
-                                </select>
+                                <label for="password-benevole" class="form-label">Mot de passe *</label>
+                                <input type="password" id="password-benevole" class="form-input" required>
                             </div>
                             
                             <div class="form-group">
-                                <label for="role" class="form-label">Rôle souhaité</label>
-                                <select id="role" class="form-select">
-                                    <option value="">Sans préférence</option>
-                                    <option value="accueil">Accueil et logistique</option>
-                                    <option value="parcours">Balisage et sécurité parcours</option>
-                                    <option value="ravito">Ravitaillement</option>
-                                    <option value="chrono">Chronométrage</option>
-                                </select>
+                                <label for="password-confirm-benevole" class="form-label">Confirmation mot de passe *</label>
+                                <input type="password" id="password-confirm-benevole" class="form-input" required>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="commentaire" class="form-label">Commentaires</label>
-                        <textarea id="commentaire" class="form-textarea" rows="3"></textarea>
                     </div>
                     
                     <button type="submit" class="btn btn-primary btn-block">Soumettre ma candidature</button>
@@ -227,12 +236,77 @@
         </div>
     </main>
 
-    <footer class="footer">
-        <div class="container">
-            <p>© 2025 Le Bol d'Air. Tous droits réservés.</p>
-        </div>
-    </footer>
+    
 
+    <script>
+        // Add event listeners to the radio buttons
+        document.getElementById('participant').addEventListener('change', function() {
+            if(this.checked) {
+                document.getElementById('participant-form').style.display = 'block';
+                document.getElementById('benevole-form').style.display = 'none';
+            }
+        });
+        
+        document.getElementById('benevole').addEventListener('change', function() {
+            if(this.checked) {
+                document.getElementById('participant-form').style.display = 'none';
+                document.getElementById('benevole-form').style.display = 'block';
+            }
+        });
+
+        // Prevent selecting "Capitaine" for both participants
+        document.getElementById('status1').addEventListener('change', function() {
+            if(this.value === 'capitaine') {
+                // If participant 1 is capitaine, participant 2 cannot be capitaine
+                let status2 = document.getElementById('status2');
+                for(let i = 0; i < status2.options.length; i++) {
+                    if(status2.options[i].value === 'capitaine') {
+                        status2.options[i].disabled = true;
+                        // If participant 2 was already capitaine, change to suiveur
+                        if(status2.value === 'capitaine') {
+                            status2.value = 'suiveur';
+                        }
+                        break;
+                    }
+                }
+            } else {
+                // Enable capitaine option for participant 2
+                let status2 = document.getElementById('status2');
+                for(let i = 0; i < status2.options.length; i++) {
+                    if(status2.options[i].value === 'capitaine') {
+                        status2.options[i].disabled = false;
+                        break;
+                    }
+                }
+            }
+        });
+
+        document.getElementById('status2').addEventListener('change', function() {
+            if(this.value === 'capitaine') {
+                // If participant 2 is capitaine, participant 1 cannot be capitaine
+                let status1 = document.getElementById('status1');
+                for(let i = 0; i < status1.options.length; i++) {
+                    if(status1.options[i].value === 'capitaine') {
+                        status1.options[i].disabled = true;
+                        // If participant 1 was already capitaine, change to suiveur
+                        if(status1.value === 'capitaine') {
+                            status1.value = 'suiveur';
+                        }
+                        break;
+                    }
+                }
+            } else {
+                // Enable capitaine option for participant 1
+                let status1 = document.getElementById('status1');
+                for(let i = 0; i < status1.options.length; i++) {
+                    if(status1.options[i].value === 'capitaine') {
+                        status1.options[i].disabled = false;
+                        break;
+                    }
+                }
+            }
+        });
+    </script>
     <script th:src="@{/js/script.js}"></script>
 </body>
 </html> 

@@ -28,6 +28,8 @@
 
   --border-radius: 8px;
   --transition-speed: 0.3s;
+  --header-height: 50px; /* Réduire la hauteur du header */
+  --content-padding: 10px; /* Padding réduit pour le contenu */
 }
 
 /* Styles de base */
@@ -37,31 +39,40 @@
   box-sizing: border-box;
 }
 
+html, body {
+  height: 100%;
+  overflow: hidden; /* Empêcher le scrolling au niveau du body */
+}
+
 body {
   font-family: var(--font-body);
-  font-size: 14px;
-  line-height: 1.4;
+  font-size: 13px; /* Réduire la taille de police par défaut */
+  line-height: 1.3; /* Réduire l'interligne */
   color: var(--black);
   background-color: var(--light-gray);
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
 }
 
 .container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 15px;
+  padding: 0 10px; /* Réduire le padding horizontal */
 }
 
 /* En-tête et navigation */
 .header {
   background-color: var(--primary-color);
   color: var(--white);
-  padding: 15px 0;
+  padding: 5px 0; /* Réduire le padding vertical */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: fixed; /* Fixer le header */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  height: var(--header-height);
 }
 
 .navbar {
@@ -76,33 +87,33 @@ body {
 }
 
 .logo {
-  max-height: 40px;
-  margin-right: 15px;
+  max-height: 25px; /* Réduire la taille du logo */
+  margin-right: 8px;
 }
 
 .main-title {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 24px;
+  font-size: 20px; /* Réduire la taille du titre */
   color: var(--white);
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .nav-menu {
   display: flex;
-  gap: 15px;
+  gap: 8px; /* Réduire l'espace entre les éléments de menu */
   list-style: none;
 }
 
 .nav-btn {
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px; /* Réduire la taille de police */
   color: var(--white);
   background-color: transparent;
   border: 2px solid var(--white);
   border-radius: var(--border-radius);
-  padding: 8px 15px;
+  padding: 5px 10px; /* Réduire le padding */
   cursor: pointer;
   transition: all var(--transition-speed);
   text-decoration: none;
@@ -123,15 +134,27 @@ body {
 /* Contenu principal */
 main {
   flex: 1;
-  padding: 25px 0;
+  padding: var(--content-padding) 0;
+  margin-top: var(--header-height); /* Marge supérieure égale à la hauteur du header */
+  height: calc(100vh - var(--header-height)); /* Hauteur calculée pour occuper tout l'espace restant */
+  overflow-y: auto; /* Permettre le défilement vertical à l'intérieur du main */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+main .container {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Permet au container de prendre toute la hauteur disponible */
 }
 
 .page-title {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 32px;
+  font-size: 24px; /* Réduire la taille du titre */
   color: var(--secondary-color);
-  margin-bottom: 20px;
+  margin-bottom: 12px; /* Réduire la marge */
   text-align: center;
 }
 
@@ -139,17 +162,17 @@ main {
   background-color: var(--white);
   border-radius: var(--border-radius);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin-bottom: 20px;
+  padding: 12px; /* Réduire le padding */
+  margin-bottom: 12px; /* Réduire la marge */
 }
 
 .card-heading {
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 20px;
+  font-size: 18px; /* Réduire la taille */
   color: var(--secondary-color);
-  margin-bottom: 15px;
-  padding-bottom: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 6px; /* Réduire le padding */
   border-bottom: 2px solid var(--primary-color);
 }
 
@@ -157,24 +180,24 @@ main {
 .row {
   display: flex;
   flex-wrap: wrap;
-  margin: -10px;
+  margin: -6px; /* Réduire les marges négatives */
 }
 
 .col {
   flex: 1;
-  padding: 10px;
-  min-width: 250px;
+  padding: 6px; /* Réduire le padding */
+  min-width: 200px; /* Réduire la largeur minimale */
 }
 
 /* Formulaires */
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 10px; /* Réduire la marge */
 }
 
 .form-label {
   display: block;
   font-weight: 600;
-  margin-bottom: 5px;
+  margin-bottom: 3px; /* Réduire la marge */
   color: var(--secondary-color);
 }
 
@@ -182,11 +205,11 @@ main {
 .form-select,
 .form-textarea {
   width: 100%;
-  padding: 10px;
+  padding: 6px; /* Réduire le padding */
   border: 1px solid var(--medium-gray);
   border-radius: var(--border-radius);
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 13px;
   transition: border-color var(--transition-speed);
 }
 
@@ -200,13 +223,13 @@ main {
 .checkbox-wrapper {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
+  gap: 6px; /* Réduire l'espace */
+  margin-bottom: 6px; /* Réduire la marge */
 }
 
 .form-checkbox {
-  width: 16px;
-  height: 16px;
+  width: 14px; /* Réduire la taille */
+  height: 14px;
   cursor: pointer;
 }
 
@@ -215,8 +238,8 @@ main {
   display: inline-block;
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 14px;
-  padding: 10px 20px;
+  font-size: 13px;
+  padding: 6px 12px; /* Réduire le padding */
   border-radius: var(--border-radius);
   cursor: pointer;
   transition: all var(--transition-speed);
@@ -226,8 +249,8 @@ main {
 }
 
 .btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px); /* Réduire l'effet de survol */
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
 }
 
 .btn-primary {
@@ -247,7 +270,7 @@ main {
 
 .btn-outline {
   background-color: transparent;
-  border: 2px solid var(--primary-color);
+  border: 1px solid var(--primary-color); /* Réduire l'épaisseur de la bordure */
   color: var(--primary-color);
 }
 
@@ -278,10 +301,11 @@ main {
 
 /* Alertes et notifications */
 .alert {
-  padding: 12px 15px;
+  padding: 8px 10px; /* Réduire le padding */
   border-radius: var(--border-radius);
-  margin-bottom: 15px;
+  margin-bottom: 10px; /* Réduire la marge */
   font-weight: 600;
+  font-size: 12px; /* Réduire la taille du texte */
 }
 
 .alert-success {
@@ -303,21 +327,28 @@ main {
 }
 
 /* Tableaux */
+.table-responsive {
+  overflow-x: auto; /* Permettre le défilement horizontal des tableaux si nécessaire */
+  max-height: 300px; /* Limiter la hauteur des tableaux pour éviter qu'ils prennent trop de place */
+  overflow-y: auto;
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
+  margin-bottom: 12px; /* Réduire la marge */
+  font-size: 12px; /* Réduire la taille du texte dans les tableaux */
 }
 
 .table th {
   background-color: var(--secondary-color);
   color: var(--white);
   text-align: left;
-  padding: 10px;
+  padding: 6px; /* Réduire le padding */
 }
 
 .table td {
-  padding: 10px;
+  padding: 6px; /* Réduire le padding */
   border-bottom: 1px solid var(--medium-gray);
 }
 
@@ -329,13 +360,51 @@ main {
   background-color: rgba(14, 191, 233, 0.1);
 }
 
+/* Adaptation spéciale pour certaines pages */
+/* Page d'accueil */
+.page-title + .card {
+  flex-shrink: 0; /* Empêche les cartes de se rétrécir sous le titre principal */
+}
+
+.row.mb-4 {
+  flex: 1;
+  margin-bottom: 8px !important; /* Réduire l'espace entre les lignes */
+}
+
+/* Page d'inscription */
+#participant-form, #benevole-form {
+  overflow-y: auto; /* Permet le défilement si nécessaire */
+  max-height: calc(100vh - var(--header-height) - 120px); /* Hauteur maximale adaptée */
+}
+
+/* Page de classement */
+.tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 8px !important;
+}
+
+.tab-btn {
+  padding: 5px 10px;
+  font-size: 12px;
+  background-color: var(--light-gray);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.tab-btn.active {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
 /* Badges et étiquettes */
 .badge {
   display: inline-block;
-  padding: 4px 8px;
-  font-size: 12px;
+  padding: 3px 6px; /* Réduire le padding */
+  font-size: 11px; /* Réduire la taille */
   font-weight: 600;
-  border-radius: 4px;
+  border-radius: 3px; /* Réduire le rayon de bordure */
   text-align: center;
 }
 
@@ -365,38 +434,38 @@ main {
 }
 
 .mt-2 {
-  margin-top: 10px;
+  margin-top: 6px; /* Réduire les marges */
 }
 
 .mt-3 {
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 .mt-4 {
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .mb-2 {
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 .mb-3 {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .mb-4 {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 /* Icônes avec texte */
 .icon-text {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px; /* Réduire l'espace */
 }
 
 .icon {
-  font-size: 18px;
+  font-size: 16px; /* Réduire la taille */
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -406,10 +475,9 @@ main {
 .footer {
   background-color: var(--secondary-color);
   color: var(--white);
-  padding: 15px 0;
+  padding: 10px 0; /* Réduire le padding */
   text-align: center;
-  font-size: 14px;
-  margin-top: auto;
+  font-size: 12px; /* Réduire la taille du texte */
 }
 
 /* Animation de bouton */
@@ -423,7 +491,7 @@ main {
   }
 
   50% {
-    transform: scale(1.03);
+    transform: scale(1.02); /* Réduire l'ampleur de l'animation */
   }
 
   100% {
@@ -438,20 +506,20 @@ main {
 /* Spécifier page boutons - Pour la navigation entre les maquettes */
 .maquette-nav {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 15px;
+  right: 15px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: 5px;
+  gap: 4px; /* Réduire l'espace */
   z-index: 1000;
 }
 
 .maquette-btn {
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 12px;
-  padding: 8px;
+  font-size: 11px; /* Réduire la taille */
+  padding: 6px; /* Réduire le padding */
   background-color: var(--secondary-color);
   color: var(--white);
   border: none;
@@ -464,23 +532,24 @@ main {
 
 .maquette-btn:hover {
   background-color: var(--primary-color);
-  transform: translateY(-2px);
+  transform: translateY(-1px); /* Réduire l'effet de survol */
 }
 
 /* Profile styles */
 .profile-info {
-  margin-bottom: 15px;
+  margin-bottom: 10px; /* Réduire la marge */
 }
 
 .profile-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 15px;
+  margin-bottom: 10px; /* Réduire la marge */
+  font-size: 12px; /* Réduire la taille de police */
 }
 
 .profile-table th,
 .profile-table td {
-  padding: 8px 12px;
+  padding: 6px 8px; /* Réduire le padding */
   text-align: left;
   border-bottom: 1px solid var(--medium-gray);
 }
@@ -503,22 +572,22 @@ main {
 .maquette-nav {
   display: flex;
   justify-content: center;
-  gap: 15px;
-  margin-top: 20px;
+  gap: 10px; /* Réduire l'espace */
+  margin-top: 15px;
   flex-wrap: wrap;
 }
 
 /* Events list styles */
 .events-list {
-  margin-bottom: 15px;
+  margin-bottom: 10px; /* Réduire la marge */
 }
 
 .event-item {
-  padding: 10px;
+  padding: 8px; /* Réduire le padding */
   border-bottom: 1px solid var(--medium-gray);
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 3px; /* Réduire l'espace */
 }
 
 .event-item:last-child {
@@ -528,7 +597,7 @@ main {
 .event-date {
   font-weight: 600;
   color: var(--secondary-color);
-  font-size: 0.9rem;
+  font-size: 0.85rem; /* Réduire la taille */
 }
 
 .event-title {
@@ -536,7 +605,7 @@ main {
 }
 
 .event-status {
-  font-size: 0.9rem;
+  font-size: 0.85rem; /* Réduire la taille */
   color: var(--dark-gray);
 }
 
@@ -546,16 +615,16 @@ main {
 
 /* Roles styles */
 .roles-info {
-  margin-bottom: 15px;
+  margin-bottom: 10px; /* Réduire la marge */
 }
 
 .role-item {
-  padding: 12px;
+  padding: 8px; /* Réduire le padding */
   border-bottom: 1px solid var(--medium-gray);
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  margin-bottom: 10px;
+  gap: 3px; /* Réduire l'espace */
+  margin-bottom: 8px; /* Réduire la marge */
   border-radius: var(--border-radius);
 }
 
@@ -567,12 +636,13 @@ main {
 .role-name {
   font-weight: 700;
   color: var(--secondary-color);
-  font-size: 1.1rem;
+  font-size: 1rem; /* Réduire la taille */
 }
 
 .role-description {
-  margin-bottom: 8px;
+  margin-bottom: 6px; /* Réduire la marge */
   color: var(--dark-gray);
+  font-size: 0.9rem; /* Réduire la taille */
 }
 
 .role-item:hover {
@@ -583,11 +653,64 @@ main {
   align-self: flex-start;
 }
 
+/* Ajustements adaptatifs pour s'assurer que tout tient dans la hauteur de la fenêtre */
+@media (max-height: 800px) {
+  .page-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .card {
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .card-heading {
+    font-size: 16px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+  }
+  
+  .form-group {
+    margin-bottom: 8px;
+  }
+  
+  .btn {
+    padding: 5px 10px;
+  }
+}
+
+@media (max-height: 600px) {
+  .page-title {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  
+  .card {
+    padding: 8px;
+    margin-bottom: 8px;
+  }
+  
+  main {
+    padding: 8px 0;
+  }
+  
+  .form-group {
+    margin-bottom: 5px;
+  }
+  
+  .card-heading {
+    font-size: 14px;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+  }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .navbar {
     flex-direction: column;
-    gap: 10px;
+    gap: 8px; /* Réduire l'espace */
   }
 
   .nav-menu {
@@ -597,5 +720,110 @@ main {
 
   .col {
     flex: 0 0 100%;
+  }
+  
+  .header {
+    height: auto;
+  }
+  
+  main {
+    height: calc(100vh - var(--header-height) - 16px); /* Ajuster la hauteur pour les écrans plus petits */
+  }
+}
+
+/* Ajout des règles pour les petits écrans mobiles */
+@media (max-width: 640px) {
+  .header {
+    height: var(--header-height); /* Garder une hauteur fixe */
+    padding: 3px 0;
+  }
+  
+  .navbar {
+    flex-direction: row; /* Garder en ligne */
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 5px;
+  }
+  
+  .logo-container {
+    flex-shrink: 0;
+    max-width: 30%; /* Limiter la largeur du container du logo */
+  }
+  
+  .logo {
+    max-height: 16px; /* Réduire davantage la taille du logo */
+    margin-right: 4px;
+  }
+  
+  .main-title {
+    font-size: 14px; /* Réduire davantage la taille du titre */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .nav-menu {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto; /* Permettre le défilement horizontal si nécessaire */
+    gap: 3px;
+    padding-bottom: 2px; /* Pour que la scrollbar ne cache pas le contenu */
+    justify-content: flex-end;
+    max-width: 70%; /* Augmenter l'espace pour les liens */
+    -ms-overflow-style: none; /* Cacher la scrollbar sur IE/Edge */
+    scrollbar-width: none; /* Cacher la scrollbar sur Firefox */
+  }
+  
+  /* Cacher la scrollbar sur Chrome/Safari */
+  .nav-menu::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .nav-btn {
+    font-size: 9px; /* Réduire encore plus la taille de police */
+    padding: 2px 4px; /* Réduire encore plus le padding */
+    border-width: 1px; /* Bordure plus fine */
+    white-space: nowrap; /* Empêcher le retour à la ligne du texte */
+    flex-shrink: 0; /* Empêcher les boutons de rétrécir */
+  }
+  
+  .btn-primary.btn-sm {
+    font-size: 9px;
+    padding: 2px 4px;
+  }
+}
+
+/* Pour les très petits écrans, utiliser un menu hamburger */
+@media (max-width: 480px) {
+  .header {
+    padding: 2px 0;
+  }
+  
+  .logo-container {
+    max-width: 50%; /* Donner plus d'espace au logo sur très petits écrans */
+  }
+  
+  .logo {
+    max-height: 14px;
+  }
+  
+  .main-title {
+    font-size: 12px;
+  }
+  
+  .nav-menu {
+    max-width: 50%; /* Réduire l'espace des liens */
+  }
+  
+  .nav-btn {
+    font-size: 8px;
+    padding: 1px 3px;
+    border-width: 1px;
+  }
+  
+  .btn-primary.btn-sm {
+    font-size: 8px;
+    padding: 1px 3px;
   }
 }
