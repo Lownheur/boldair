@@ -134,10 +134,10 @@ body {
 /* Contenu principal */
 main {
   flex: 1;
-  padding: var(--content-padding) 0;
-  margin-top: var(--header-height); /* Marge supérieure égale à la hauteur du header */
-  min-height: calc(100vh - var(--header-height) - 50px); /* 50px pour la hauteur du footer */
-  overflow-y: auto; /* Permettre le défilement vertical à l'intérieur du main */
+  padding: 30px 0;
+  margin-top: calc(var(--header-height) + 20px);
+  min-height: calc(100vh - var(--header-height) - 50px);
+  overflow-y: auto;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -161,19 +161,28 @@ main .container {
 .card {
   background-color: var(--white);
   border-radius: var(--border-radius);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 12px; /* Réduire le padding */
-  margin-bottom: 12px; /* Réduire la marge */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card-heading {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: 18px; /* Réduire la taille */
-  color: var(--secondary-color);
-  margin-bottom: 10px;
-  padding-bottom: 6px; /* Réduire le padding */
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
   border-bottom: 2px solid var(--primary-color);
+}
+
+.card-header h2 {
+  color: var(--secondary-color);
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
 }
 
 /* Grille et flexible layout */
@@ -401,11 +410,17 @@ main .container {
 /* Badges et étiquettes */
 .badge {
   display: inline-block;
-  padding: 3px 6px; /* Réduire le padding */
-  font-size: 11px; /* Réduire la taille */
+  padding: 5px 10px;
+  font-size: 12px;
   font-weight: 600;
-  border-radius: 3px; /* Réduire le rayon de bordure */
+  border-radius: 20px;
   text-align: center;
+  margin: 0 5px;
+  transition: transform 0.2s ease;
+}
+
+.badge:hover {
+  transform: scale(1.05);
 }
 
 .badge-primary {
@@ -549,19 +564,24 @@ main .container {
 
 /* Profile styles */
 .profile-info {
-  margin-bottom: 10px; /* Réduire la marge */
+  margin: 20px 0;
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
 }
 
 .profile-table {
   width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 10px; /* Réduire la marge */
-  font-size: 12px; /* Réduire la taille de police */
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 20px;
+  font-size: 14px;
 }
 
 .profile-table th,
 .profile-table td {
-  padding: 6px 8px; /* Réduire le padding */
+  padding: 12px 15px;
   text-align: left;
   border-bottom: 1px solid var(--medium-gray);
 }
@@ -569,7 +589,14 @@ main .container {
 .profile-table th {
   font-weight: 600;
   color: var(--secondary-color);
-  width: 40%;
+  width: 35%;
+  background-color: var(--light-gray);
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+}
+
+.profile-table td {
+  background-color: var(--white);
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
 }
 
 .profile-table tr:last-child th,
@@ -577,8 +604,13 @@ main .container {
   border-bottom: none;
 }
 
-.profile-table tr:hover {
-  background-color: var(--light-gray);
+.profile-table tr:hover th {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.profile-table tr:hover td {
+  background-color: rgba(14, 191, 233, 0.1);
 }
 
 .maquette-nav {
@@ -677,7 +709,7 @@ main .container {
     margin-bottom: 10px;
   }
   
-  .card-heading {
+  .card-header h2 {
     font-size: 16px;
     margin-bottom: 8px;
     padding-bottom: 6px;
@@ -711,7 +743,7 @@ main .container {
     margin-bottom: 5px;
   }
   
-  .card-heading {
+  .card-header h2 {
     font-size: 14px;
     margin-bottom: 6px;
     padding-bottom: 4px;
@@ -740,6 +772,28 @@ main .container {
   
   main {
     height: calc(100vh - var(--header-height) - 16px); /* Ajuster la hauteur pour les écrans plus petits */
+  }
+
+  .profile-info {
+    padding: 15px;
+    margin: 15px 0;
+  }
+
+  .profile-table {
+    font-size: 13px;
+  }
+
+  .profile-table th,
+  .profile-table td {
+    padding: 10px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .card-header h2 {
+    font-size: 20px;
   }
 }
 
