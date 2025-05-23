@@ -44,6 +44,11 @@
                         <a th:href="@{/compte/benevol}" class="nav-btn" th:classappend="${activeTab == 'benevol'} ? 'active'">Espace Bénévole</a>
                     </li>
                     
+                    <!-- Only shown to authenticated users -->
+                    <li sec:authorize="isAuthenticated()">
+                        <a th:href="@{/compte/mon-compte}" class="nav-btn" th:classappend="${activeTab == 'mon-compte'} ? 'active'">Mon compte</a>
+                    </li>
+                    
                     <!-- Logout button for authenticated users -->
                     <li sec:authorize="hasAnyRole('USER', 'ADMIN', 'BENEVOL')" class="logout-btn">
                         <form th:action="@{/logout}" method="post" style="display: inline;">

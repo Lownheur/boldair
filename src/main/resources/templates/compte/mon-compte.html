@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Mon Compte - Bol d'Air</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+  <div th:replace="~{_fragments/header :: header('mon-compte')}"></div>
+
+  <main class="container">
+    <div class="row mt-4">
+      <div class="col">
+        <div class="card">
+          <div class="card-header">
+            <h2>Mon Compte</h2>
+          </div>
+          <div class="card-body">
+            <div class="profile-info">
+              <table class="table">
+                <tr>
+                  <th>Pseudo:</th>
+                  <td th:text="${compte.pseudo}">pseudo</td>
+                </tr>
+                <tr>
+                  <th>Email:</th>
+                  <td th:text="${compte.email}">email</td>
+                </tr>
+                <tr>
+                  <th>Rôles:</th>
+                  <td>
+                    <span th:if="${compte.roleAdmin}" class="badge badge-primary">Administrateur</span>
+                    <span th:if="${compte.roleBenevol}" class="badge badge-success">Bénévole</span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+            <!-- Informations supplémentaires pour les bénévoles -->
+            <div th:if="${benevol != null}" class="mt-4">
+              <h3>Informations Bénévole</h3>
+              <table class="table">
+                <tr>
+                  <th>Nom:</th>
+                  <td th:text="${benevol.nom}">nom</td>
+                </tr>
+                <tr>
+                  <th>Prénom:</th>
+                  <td th:text="${benevol.prénom}">prénom</td>
+                </tr>
+                <tr>
+                  <th>Téléphone:</th>
+                  <td th:text="${benevol.téléphone}">téléphone</td>
+                </tr>
+                <tr>
+                  <th>Statut:</th>
+                  <td th:text="${benevol.statut}">statut</td>
+                </tr>
+                <tr>
+                  <th>Type:</th>
+                  <td th:text="${benevol.interne___externe ? 'Interne' : 'Externe'}">type</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div th:replace="~{_fragments/footer :: footer}"></div>
+</body>
+
+</html>

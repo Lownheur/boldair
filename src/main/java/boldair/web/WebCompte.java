@@ -83,6 +83,27 @@ public class WebCompte {
 		return "compte/benevol";
 	}
 
+	@GetMapping("/mon-compte")
+	public String monCompte(Model model) {
+		// Get the current authenticated user
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String username = auth.getName();
+		
+		// Find the compte by username (pseudo)
+		Compte compte = daoCompte.findByPseudo(username);
+		
+		// Add compte to the model
+		model.addAttribute("compte", compte);
+		
+		// If the user is a benevol, add benevol information
+		if (compte.isRoleBenevol()) {
+			Benevol benevol = daoBenevol.findByCompteId(compte.getIdCompte());
+			model.addAttribute("benevol", benevol);
+		}
+		
+		return "compte/mon-compte";
+	}
+
 	// -------
 	// Endpoints
 	// -------
