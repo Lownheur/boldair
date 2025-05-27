@@ -1,312 +1,360 @@
-<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org" lang="fr"><head>    <meta charset="UTF-8">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Inscription - Le Bol d'Air</title>    <link rel="stylesheet" th:href="@{/css/styles.css}"></head><body>    <header th:replace="~{_fragments/header :: header('inscription')}"></header>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 
-    <main>
-        <div class="container">
-            <h1 class="page-title">Inscription</h1>
-            
-            <div class="card mb-4">
-                <h2 class="card-heading">Type d'inscription</h2>
-                <div class="row mb-3">
-                    <div class="col">
-                        <div class="checkbox-wrapper">
-                            <input type="radio" id="participant" name="type" class="form-checkbox" checked>
-                            <label for="participant">Équipe</label>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="checkbox-wrapper">
-                            <input type="radio" id="benevole" name="type" class="form-checkbox">
-                            <label for="benevole">Bénévole</label>
-                        </div>
-                    </div>
-                </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscription - Le Bol d'Air</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+  <header th:replace="~{_fragments/header :: header('inscription')}"></header>
+
+  <main>
+    <div class="container">
+      <h1 class="page-title">Inscription</h1>
+
+      <div class="card mb-4">
+        <h2 class="card-heading">Type d'inscription</h2>
+        <div class="row mb-3">
+          <div class="col">
+            <div class="checkbox-wrapper">
+              <input type="radio" id="participant" name="type" class="form-checkbox" checked>
+              <label for="participant">Équipe</label>
             </div>
-            
-            <div id="participant-form" class="card mb-4">
-                <h2 class="card-heading">Formulaire d'inscription - Équipe</h2>
-                
-                <div class="alert alert-warning mb-3">
-                    <div class="icon-text">
-                        <span class="icon">ℹ️</span>
-                        <span>Les champs marqués d'un astérisque (*) sont obligatoires.</span>
-                    </div>
-                </div>
-                
-                <form>
-                    <div class="row mb-4">
-                        <div class="col">
-                            <h3 class="mb-3">Informations du compte</h3>
-                            
-                            <div class="form-group">
-                                <label for="email" class="form-label">Email *</label>
-                                <input type="email" id="email" class="form-input" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="equipe" class="form-label">Nom d'équipe *</label>
-                                <input type="text" id="equipe" class="form-input" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="categorie" class="form-label">Catégorie *</label>
-                                <select id="categorie" class="form-select" required>
-                                    <option value="">Sélectionnez une catégorie</option>
-                                    <option value="bol">Bol d'Air (complet)</option>
-                                    <option value="mini">Mini Bol (2 épreuves)</option>
-                                    <option value="decouverte">Découverte (1 épreuve)</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="password" class="form-label">Mot de passe *</label>
-                                <input type="password" id="password" class="form-input" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="password-confirm" class="form-label">Confirmation mot de passe *</label>
-                                <input type="password" id="password-confirm" class="form-input" required>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row mb-4">
-                        <div class="col">
-                            <h3 class="mb-3">Participant 1</h3>
-                            
-                            <div class="form-group">
-                                <label for="nom1" class="form-label">Nom *</label>
-                                <input type="text" id="nom1" class="form-input" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="prenom1" class="form-label">Prénom *</label>
-                                <input type="text" id="prenom1" class="form-input" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="sexe1" class="form-label">Sexe *</label>
-                                <select id="sexe1" class="form-select" required>
-                                    <option value="">Sélectionnez</option>
-                                    <option value="homme">Homme</option>
-                                    <option value="femme">Femme</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="status1" class="form-label">Statut *</label>
-                                <select id="status1" class="form-select" required>
-                                    <option value="">Sélectionnez</option>
-                                    <option value="capitaine">Capitaine</option>
-                                    <option value="suiveur">Suiveur</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="naissance1" class="form-label">Date de naissance *</label>
-                                <input type="date" id="naissance1" class="form-input" required>
-                            </div>
-                        </div>
-                        
-                        <div class="col">
-                            <h3 class="mb-3">Participant 2</h3>
-                            
-                            <div class="form-group">
-                                <label for="nom2" class="form-label">Nom *</label>
-                                <input type="text" id="nom2" class="form-input" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="prenom2" class="form-label">Prénom *</label>
-                                <input type="text" id="prenom2" class="form-input" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="sexe2" class="form-label">Sexe *</label>
-                                <select id="sexe2" class="form-select" required>
-                                    <option value="">Sélectionnez</option>
-                                    <option value="homme">Homme</option>
-                                    <option value="femme">Femme</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="status2" class="form-label">Statut *</label>
-                                <select id="status2" class="form-select" required>
-                                    <option value="">Sélectionnez</option>
-                                    <option value="capitaine">Capitaine</option>
-                                    <option value="suiveur">Suiveur</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="naissance2" class="form-label">Date de naissance *</label>
-                                <input type="date" id="naissance2" class="form-input" required>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row mt-3">
-                        <div class="col">
-                            <h3 class="mb-3">Conditions et validation</h3>
-                            
-                            <div class="checkbox-wrapper mb-3">
-                                <input type="checkbox" id="conditions" class="form-checkbox" required>
-                                <label for="conditions">J'accepte les conditions générales *</label>
-                            </div>
-                            
-                            <div class="checkbox-wrapper mb-3">
-                                <input type="checkbox" id="certificat" class="form-checkbox" required>
-                                <label for="certificat">Je m'engage à fournir un certificat médical avant l'épreuve *</label>
-                            </div>
-                            
-                            <div class="checkbox-wrapper mb-3">
-                                <input type="checkbox" id="paiement" class="form-checkbox" required>
-                                <label for="paiement">Je m'engage à payer après mon inscription en ligne ou le jour de l'épreuve *</label>
-                            </div>
-                            
-                            <button type="submit" class="btn btn-primary btn-block">Valider mon inscription</button>
-                        </div>
-                    </div>
-                </form>
+          </div>
+          <div class="col">
+            <div class="checkbox-wrapper">
+              <input type="radio" id="benevole" name="type" class="form-checkbox">
+              <label for="benevole">Bénévole</label>
             </div>
-            
-            <div id="benevole-form" class="card mb-4" style="display: none;">
-                <h2 class="card-heading">Formulaire d'inscription - Bénévole</h2>
-                
-                <div class="alert alert-success mb-3">
-                    <div class="icon-text">
-                        <span class="icon">🧑‍💼</span>
-                        <span>Merci de vous porter volontaire pour l'organisation du Bol d'Air !</span>
-                    </div>
-                </div>
-                
-                <form>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="nom-benevole" class="form-label">Nom *</label>
-                                <input type="text" id="nom-benevole" class="form-input" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="prenom-benevole" class="form-label">Prénom *</label>
-                                <input type="text" id="prenom-benevole" class="form-input" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="email-benevole" class="form-label">Email *</label>
-                                <input type="email" id="email-benevole" class="form-input" required>
-                            </div>
-                        </div>
-                        
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="tel-benevole" class="form-label">Téléphone *</label>
-                                <input type="tel" id="tel-benevole" class="form-input" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="password-benevole" class="form-label">Mot de passe *</label>
-                                <input type="password" id="password-benevole" class="form-input" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="password-confirm-benevole" class="form-label">Confirmation mot de passe *</label>
-                                <input type="password" id="password-confirm-benevole" class="form-input" required>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary btn-block">Soumettre ma candidature</button>
-                </form>
-            </div>
-            
-            <div class="card">
-                <h2 class="card-heading">Informations complémentaires</h2>
-                <p class="mb-2">Pour toute question concernant l'inscription, vous pouvez nous contacter :</p>
-                <div class="icon-text mb-2">
-                    <span class="icon">📧</span>
-                    <span>contact@boldair2025.fr</span>
-                </div>
-                <div class="icon-text">
-                    <span class="icon">📞</span>
-                    <span>06 xx xx xx xx</span>
-                </div>
-            </div>
+          </div>
         </div>
-    </main>
+      </div>
 
-    
+      <div id="participant-form" class="card mb-4">
+        <h2 class="card-heading">Formulaire d'inscription - Équipe</h2>
 
-    <script>
-        // Add event listeners to the radio buttons
-        document.getElementById('participant').addEventListener('change', function() {
-            if(this.checked) {
-                document.getElementById('participant-form').style.display = 'block';
-                document.getElementById('benevole-form').style.display = 'none';
-            }
-        });
-        
-        document.getElementById('benevole').addEventListener('change', function() {
-            if(this.checked) {
-                document.getElementById('participant-form').style.display = 'none';
-                document.getElementById('benevole-form').style.display = 'block';
-            }
-        });
+        <div class="alert alert-warning mb-3">
+          <div class="icon-text">
+            <span class="icon">ℹ️</span>
+            <span>Les champs marqués d'un astérisque (*) sont obligatoires.</span>
+          </div>
+        </div>
 
-        // Prevent selecting "Capitaine" for both participants
-        document.getElementById('status1').addEventListener('change', function() {
-            if(this.value === 'capitaine') {
-                // If participant 1 is capitaine, participant 2 cannot be capitaine
-                let status2 = document.getElementById('status2');
-                for(let i = 0; i < status2.options.length; i++) {
-                    if(status2.options[i].value === 'capitaine') {
-                        status2.options[i].disabled = true;
-                        // If participant 2 was already capitaine, change to suiveur
-                        if(status2.value === 'capitaine') {
-                            status2.value = 'suiveur';
-                        }
-                        break;
-                    }
-                }
-            } else {
-                // Enable capitaine option for participant 2
-                let status2 = document.getElementById('status2');
-                for(let i = 0; i < status2.options.length; i++) {
-                    if(status2.options[i].value === 'capitaine') {
-                        status2.options[i].disabled = false;
-                        break;
-                    }
-                }
-            }
-        });
+        <div th:if="${alert}" th:class="'alert alert-' + ${alert.color.name().toLowerCase()} + ' mb-3'">
+          <div class="icon-text">
+            <span class="icon" th:text="${alert.color.name() == 'DANGER' ? '❌' : '✅'}"></span>
+            <span th:text="${alert.message}"></span>
+          </div>
+        </div>
 
-        document.getElementById('status2').addEventListener('change', function() {
-            if(this.value === 'capitaine') {
-                // If participant 2 is capitaine, participant 1 cannot be capitaine
-                let status1 = document.getElementById('status1');
-                for(let i = 0; i < status1.options.length; i++) {
-                    if(status1.options[i].value === 'capitaine') {
-                        status1.options[i].disabled = true;
-                        // If participant 1 was already capitaine, change to suiveur
-                        if(status1.value === 'capitaine') {
-                            status1.value = 'suiveur';
-                        }
-                        break;
-                    }
-                }
-            } else {
-                // Enable capitaine option for participant 1
-                let status1 = document.getElementById('status1');
-                for(let i = 0; i < status1.options.length; i++) {
-                    if(status1.options[i].value === 'capitaine') {
-                        status1.options[i].disabled = false;
-                        break;
-                    }
-                }
+        <form method="post" th:action="@{/inscription}" id="equipe-form">
+          <div class="row mb-4">
+            <div class="col">
+              <h3 class="mb-3">Informations du compte</h3>
+
+              <div class="form-group">
+                <label for="email" class="form-label">Email *</label>
+                <input type="email" id="email" name="email" class="form-input" th:value="${email}" required>
+              </div>
+
+              <div class="form-group">
+                <label for="equipe" class="form-label">Nom d'équipe *</label>
+                <input type="text" id="equipe" name="equipe" class="form-input" th:value="${equipe}" required>
+              </div>
+              <div class="form-group">
+                <label for="categorie" class="form-label">Catégorie *</label>
+                <select id="categorie" name="categorie" class="form-select" required>
+                  <option value="">Sélectionnez une catégorie</option>
+                  <option value="bol" th:selected="${categorie == 'bol'}">Bol d'Air (complet)</option>
+                  <option value="mini" th:selected="${categorie == 'mini'}">Mini Bol (2 épreuves)</option>
+                  <option value="decouverte" th:selected="${categorie == 'decouverte'}">Découverte (1 épreuve)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="ticketRepas" class="form-label">Nombre de tickets repas</label>
+                <input type="number" id="ticketRepas" name="ticketRepas" class="form-input" min="0" max="10" value="0"
+                  th:value="${ticketRepas}">
+                <small class="form-text">Le repas sera servi après les épreuves (maximum 10 tickets)</small>
+              </div>
+
+              <div class="form-group">
+                <label for="password" class="form-label">Mot de passe *</label>
+                <input type="password" id="password" name="password" class="form-input" required>
+              </div>
+
+              <div class="form-group">
+                <label for="password-confirm" class="form-label">Confirmation mot de passe *</label>
+                <input type="password" id="password-confirm" class="form-input" required>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col">
+              <h3 class="mb-3">Participant 1</h3>
+
+              <div class="form-group">
+                <label for="nom1" class="form-label">Nom *</label>
+                <input type="text" id="nom1" name="nom1" class="form-input" th:value="${nom1}" required>
+              </div>
+
+              <div class="form-group">
+                <label for="prenom1" class="form-label">Prénom *</label>
+                <input type="text" id="prenom1" name="prenom1" class="form-input" th:value="${prenom1}" required>
+              </div>
+
+              <div class="form-group">
+                <label for="sexe1" class="form-label">Sexe *</label>
+                <select id="sexe1" name="sexe1" class="form-select" required>
+                  <option value="">Sélectionnez</option>
+                  <option value="homme" th:selected="${sexe1 == 'homme'}">Homme</option>
+                  <option value="femme" th:selected="${sexe1 == 'femme'}">Femme</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="status1" class="form-label">Statut *</label>
+                <select id="status1" name="status1" class="form-select" required>
+                  <option value="">Sélectionnez</option>
+                  <option value="capitaine" th:selected="${status1 == 'capitaine'}">Capitaine</option>
+                  <option value="suiveur" th:selected="${status1 == 'suiveur'}">Suiveur</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="naissance1" class="form-label">Date de naissance *</label>
+                <input type="date" id="naissance1" name="naissance1" class="form-input" th:value="${naissance1}"
+                  required>
+              </div>
+            </div>
+
+            <div class="col">
+              <h3 class="mb-3">Participant 2</h3>
+
+              <div class="form-group">
+                <label for="nom2" class="form-label">Nom *</label>
+                <input type="text" id="nom2" name="nom2" class="form-input" th:value="${nom2}" required>
+              </div>
+
+              <div class="form-group">
+                <label for="prenom2" class="form-label">Prénom *</label>
+                <input type="text" id="prenom2" name="prenom2" class="form-input" th:value="${prenom2}" required>
+              </div>
+
+              <div class="form-group">
+                <label for="sexe2" class="form-label">Sexe *</label>
+                <select id="sexe2" name="sexe2" class="form-select" required>
+                  <option value="">Sélectionnez</option>
+                  <option value="homme" th:selected="${sexe2 == 'homme'}">Homme</option>
+                  <option value="femme" th:selected="${sexe2 == 'femme'}">Femme</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="status2" class="form-label">Statut *</label>
+                <select id="status2" name="status2" class="form-select" required>
+                  <option value="">Sélectionnez</option>
+                  <option value="capitaine" th:selected="${status2 == 'capitaine'}">Capitaine</option>
+                  <option value="suiveur" th:selected="${status2 == 'suiveur'}">Suiveur</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="naissance2" class="form-label">Date de naissance *</label>
+                <input type="date" id="naissance2" name="naissance2" class="form-input" th:value="${naissance2}"
+                  required>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-3">
+            <div class="col">
+              <h3 class="mb-3">Conditions et validation</h3>
+              <div class="checkbox-wrapper mb-3">
+                <input type="checkbox" id="conditions" name="conditions" class="form-checkbox" required>
+                <label for="conditions">J'accepte les conditions générales *</label>
+              </div>
+
+              <div class="checkbox-wrapper mb-3">
+                <input type="checkbox" id="certificat" name="certificat" class="form-checkbox" required>
+                <label for="certificat">Je m'engage à fournir un certificat médical avant l'épreuve *</label>
+              </div>
+
+              <div class="checkbox-wrapper mb-3">
+                <input type="checkbox" id="paiement" name="paiement" class="form-checkbox" required>
+                <label for="paiement">Je m'engage à payer après mon inscription en ligne ou le jour de l'épreuve
+                  *</label>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block">Valider mon inscription</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div id="benevole-form" class="card mb-4" style="display: none;">
+        <h2 class="card-heading">Formulaire d'inscription - Bénévole</h2>
+
+        <div class="alert alert-success mb-3">
+          <div class="icon-text">
+            <span class="icon">🧑‍💼</span>
+            <span>Merci de vous porter volontaire pour l'organisation du Bol d'Air !</span>
+          </div>
+        </div>
+
+        <form>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label for="nom-benevole" class="form-label">Nom *</label>
+                <input type="text" id="nom-benevole" class="form-input" required>
+              </div>
+
+              <div class="form-group">
+                <label for="prenom-benevole" class="form-label">Prénom *</label>
+                <input type="text" id="prenom-benevole" class="form-input" required>
+              </div>
+
+              <div class="form-group">
+                <label for="email-benevole" class="form-label">Email *</label>
+                <input type="email" id="email-benevole" class="form-input" required>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="form-group">
+                <label for="tel-benevole" class="form-label">Téléphone *</label>
+                <input type="tel" id="tel-benevole" class="form-input" required>
+              </div>
+
+              <div class="form-group">
+                <label for="password-benevole" class="form-label">Mot de passe *</label>
+                <input type="password" id="password-benevole" class="form-input" required>
+              </div>
+
+              <div class="form-group">
+                <label for="password-confirm-benevole" class="form-label">Confirmation mot de passe *</label>
+                <input type="password" id="password-confirm-benevole" class="form-input" required>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">Soumettre ma candidature</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2 class="card-heading">Informations complémentaires</h2>
+        <p class="mb-2">Pour toute question concernant l'inscription, vous pouvez nous contacter :</p>
+        <div class="icon-text mb-2">
+          <span class="icon">📧</span>
+          <span>contact@boldair2025.fr</span>
+        </div>
+        <div class="icon-text">
+          <span class="icon">📞</span>
+          <span>06 xx xx xx xx</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Add event listeners to the radio buttons
+    document.getElementById('participant').addEventListener('change', function () {
+      if (this.checked) {
+        document.getElementById('participant-form').style.display = 'block';
+        document.getElementById('benevole-form').style.display = 'none';
+      }
+    });
+
+    document.getElementById('benevole').addEventListener('change', function () {
+      if (this.checked) {
+        document.getElementById('participant-form').style.display = 'none';
+        document.getElementById('benevole-form').style.display = 'block';
+      }
+    });
+
+    // Prevent selecting "Capitaine" for both participants
+    document.getElementById('status1').addEventListener('change', function () {
+      if (this.value === 'capitaine') {
+        // If participant 1 is capitaine, participant 2 cannot be capitaine
+        let status2 = document.getElementById('status2');
+        for (let i = 0; i < status2.options.length; i++) {
+          if (status2.options[i].value === 'capitaine') {
+            status2.options[i].disabled = true;
+            // If participant 2 was already capitaine, change to suiveur
+            if (status2.value === 'capitaine') {
+              status2.value = 'suiveur';
             }
-        });
-    </script>
-    <script th:src="@{/js/script.js}"></script>
+            break;
+          }
+        }
+      } else {
+        // Enable capitaine option for participant 2
+        let status2 = document.getElementById('status2');
+        for (let i = 0; i < status2.options.length; i++) {
+          if (status2.options[i].value === 'capitaine') {
+            status2.options[i].disabled = false;
+            break;
+          }
+        }
+      }
+    });
+
+    document.getElementById('status2').addEventListener('change', function () {
+      if (this.value === 'capitaine') {
+        // If participant 2 is capitaine, participant 1 cannot be capitaine
+        let status1 = document.getElementById('status1');
+        for (let i = 0; i < status1.options.length; i++) {
+          if (status1.options[i].value === 'capitaine') {
+            status1.options[i].disabled = true;
+            // If participant 1 was already capitaine, change to suiveur
+            if (status1.value === 'capitaine') {
+              status1.value = 'suiveur';
+            }
+            break;
+          }
+        }
+      } else {
+        // Enable capitaine option for participant 1
+        let status1 = document.getElementById('status1');
+        for (let i = 0; i < status1.options.length; i++) {
+          if (status1.options[i].value === 'capitaine') {
+            status1.options[i].disabled = false;
+            break;
+          }
+        }
+      }
+    });
+
+    // Form validation
+    document.getElementById('equipe-form').addEventListener('submit', function (event) {
+      const password = document.getElementById('password').value;
+      const passwordConfirm = document.getElementById('password-confirm').value;
+
+      // Check if passwords match
+      if (password !== passwordConfirm) {
+        event.preventDefault();
+        alert('Les mots de passe ne correspondent pas.');
+        return false;
+      }
+
+      // Ensure one participant is capitaine
+      const status1 = document.getElementById('status1').value;
+      const status2 = document.getElementById('status2').value;
+
+      if ((status1 !== 'capitaine' && status2 !== 'capitaine')) {
+        event.preventDefault();
+        alert('Un des participants doit être capitaine.');
+        return false;
+      }
+
+      return true;
+    });
+  </script>
+  <script th:src="@{/js/script.js}"></script>
 </body>
-</html> 
+
+</html>

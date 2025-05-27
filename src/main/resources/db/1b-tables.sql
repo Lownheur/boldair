@@ -1,6 +1,9 @@
 -- Suppression des tables existantes si elles existent (optionnel, pour un test propre)
 -- Attention : ceci supprime toutes les données dans ces tables !
 
+-- Set search path to boldair schema
+SET search_path TO boldair;
+
 -- Drop tables in reverse order of dependencies
 DROP TABLE IF EXISTS compte_admin CASCADE;
 DROP TABLE IF EXISTS compte_participant CASCADE;
@@ -154,4 +157,3 @@ CREATE TABLE compte_admin(
    FOREIGN KEY(Id_Admin) REFERENCES Admin(Id_Admin),
    FOREIGN KEY(id_compte) REFERENCES compte(id_compte)
 );
-
