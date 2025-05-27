@@ -1,8 +1,8 @@
 -------
 -- Ajout d'extension à PostgreSQL
 -------
-DROP EXTENSION IF EXISTS pgcrypto;
-CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
+SET search_path TO boldair, public;
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 
 -------
@@ -29,6 +29,6 @@ INSERT INTO Benevol (interne___externe, nom, email, téléphone, prénom, statut
 
 -- Link the benevol to the compte (mika)
 INSERT INTO compte_benevol (Id_Benevol, id_compte)
-SELECT b.Id_Benevol, c.id_compte 
-FROM Benevol b, compte c 
+SELECT b.Id_Benevol, c.id_compte
+FROM Benevol b, compte c
 WHERE b.email = c.email AND c.pseudo = 'mika';

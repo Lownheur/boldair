@@ -27,6 +27,7 @@ public class Init_DB {
 	@Sql( {
 			"/db/3_delete.sql",
 			"/db/3-compte.sql",
+			"/db/4-epreuve-data.sql",
 	} )
 	void db_3_Data() {
 	}
