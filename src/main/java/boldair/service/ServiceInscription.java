@@ -19,10 +19,9 @@ import boldair.service.exception.InscriptionException;
 public class ServiceInscription {
 
 	@Autowired
-	private DaoCompte daoCompte;
-
+	private DaoCompte	daoCompte;
 	@Autowired
-	private DaoEquipe daoEquipe;
+	private DaoEquipe	daoEquipe;
 
 	@Autowired
 	private DaoParticipant daoParticipant;
@@ -38,6 +37,7 @@ public class ServiceInscription {
 			// Informations de l'équipe
 			String nomEquipe,
 			String categorie,
+			String ticketRepas,
 			// Informations du participant 1
 			String nom1,
 			String prenom1,
@@ -68,27 +68,51 @@ public class ServiceInscription {
 		compte.setEmpreinteMdp( passwordEncoder.encode( motDePasse ) );
 		compte.setRoleAdmin( false );
 		compte.setRoleBenevol( false );
-
 		// Sauvegarder le compte
 		compte = daoCompte.save( compte );
 
-		// Créer une équipe (id_epreuve fixé à 1 par défaut pour le moment)
+		// Déterminer l'épreuve selon la catégorie
+		String	nomEpreuve;
+		Long	idEpreuve;
+		switch ( categorie ) {
+		case "mini":
+			nomEpreuve = "Mini Bol d'Air";
+			idEpreuve = 1L;
+			break;
+		case "bol":
+			nomEpreuve = "Bol d'Air";
+			idEpreuve = 2L;
+			break;
+		case "decouverte":
+			nomEpreuve = "Bol d'Air Découverte";
+			idEpreuve = 3L;
+			break;
+		default:
+			nomEpreuve = "Bol d'Air";
+			idEpreuve = 2L;
+			break;
+		}
+
+		// Créer une équipe
 		Equipe equipe = new Equipe();
 		equipe.setNomEquipe( nomEquipe );
 		equipe.setCategorie( categorie );
+		equipe.setNomBolDair( nomEpreuve ); // Nom complet de l'épreuve selon la catégorie
+		equipe.setTicketRepas( ticketRepas ); // Nombre de tickets repas
 		equipe.setPaid( false ); // Par défaut, le paiement n'est pas effectué
-		equipe.setIdEpreuve( 1L ); // Valeur par défaut, à adapter selon les besoins
+		equipe.setIdEpreuve( idEpreuve ); // ID de l'épreuve selon la catégorie
 
 		// Sauvegarder l'équipe
-		equipe = daoEquipe.save( equipe );
-
-		// Créer le participant 1
+		equipe = daoEquipe.save( equipe ); // Créer le participant 1
 		Participant participant1 = new Participant();
 		participant1.setNom( nom1 );
 		participant1.setPrenom( prenom1 );
 		participant1.setSexe( sexe1 );
 		participant1.setStatus( statut1 );
+		participant1.setNomEquipe( nomEquipe ); // pseudo du compte
+		participant1.setBolDAir( categorie ); // catégorie de l'épreuve
 		participant1.setDateNaissance( dateNaissance1 );
+		participant1.setEmail( email ); // Même email que le compte
 		participant1.setIdEquipe( equipe.getIdEquipe() );
 
 		// Sauvegarder le participant 1
@@ -100,7 +124,10 @@ public class ServiceInscription {
 		participant2.setPrenom( prenom2 );
 		participant2.setSexe( sexe2 );
 		participant2.setStatus( statut2 );
+		participant2.setNomEquipe( nomEquipe ); // pseudo du compte
+		participant2.setBolDAir( categorie ); // catégorie de l'épreuve
 		participant2.setDateNaissance( dateNaissance2 );
+		participant2.setEmail( email ); // Même email que le compte
 		participant2.setIdEquipe( equipe.getIdEquipe() );
 
 		// Sauvegarder le participant 2

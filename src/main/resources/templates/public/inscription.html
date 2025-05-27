@@ -64,7 +64,6 @@
                 <label for="equipe" class="form-label">Nom d'équipe *</label>
                 <input type="text" id="equipe" name="equipe" class="form-input" th:value="${equipe}" required>
               </div>
-
               <div class="form-group">
                 <label for="categorie" class="form-label">Catégorie *</label>
                 <select id="categorie" name="categorie" class="form-select" required>
@@ -73,6 +72,12 @@
                   <option value="mini" th:selected="${categorie == 'mini'}">Mini Bol (2 épreuves)</option>
                   <option value="decouverte" th:selected="${categorie == 'decouverte'}">Découverte (1 épreuve)</option>
                 </select>
+              </div>
+              <div class="form-group">
+                <label for="ticketRepas" class="form-label">Nombre de tickets repas</label>
+                <input type="number" id="ticketRepas" name="ticketRepas" class="form-input" min="0" max="10" value="0"
+                  th:value="${ticketRepas}">
+                <small class="form-text">Le repas sera servi après les épreuves (maximum 10 tickets)</small>
               </div>
 
               <div class="form-group">

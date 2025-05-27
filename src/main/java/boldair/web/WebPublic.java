@@ -56,9 +56,9 @@ public class WebPublic {
 	public String inscription() {
 		return "public/inscription";
 	}
+
 	// -------
 	// inscriptionSubmit()
-
 	@PostMapping( "/inscription" )
 	public String inscriptionSubmit(
 			// Informations du compte
@@ -67,6 +67,7 @@ public class WebPublic {
 			// Informations de l'équipe
 			@RequestParam( "equipe" ) String equipe,
 			@RequestParam( "categorie" ) String categorie,
+			@RequestParam( "ticketRepas" ) String ticketRepas,
 			// Informations du participant 1
 			@RequestParam( "nom1" ) String nom1,
 			@RequestParam( "prenom1" ) String prenom1,
@@ -85,14 +86,12 @@ public class WebPublic {
 		try {
 			// Convertir les dates de naissance en LocalDate
 			LocalDate	dateNaissance1	= LocalDate.parse( naissance1 );
-			LocalDate	dateNaissance2	= LocalDate.parse( naissance2 );
-
-			// Appeler le service d'inscription
+			LocalDate	dateNaissance2	= LocalDate.parse( naissance2 );	// Appeler le service d'inscription
 			serviceInscription.inscrireEquipe(
 					email, password,
-					equipe, categorie,
+					equipe, categorie, ticketRepas,
 					nom1, prenom1, sexe1, status1, dateNaissance1,
-					nom2, prenom2, sexe2, status2, dateNaissance2 ); // Ajouter un message de succès
+					nom2, prenom2, sexe2, status2, dateNaissance2 );// Ajouter un message de succès
 			redirectAttributes.addFlashAttribute( "alert",
 					new Alert(
 							Color.SUCCESS,
@@ -102,12 +101,11 @@ public class WebPublic {
 			return "redirect:/connexion";
 		} catch ( InscriptionException e ) {
 			// Ajouter un message d'erreur
-			model.addAttribute( "alert", new Alert( Color.DANGER, e.getMessage() ) );
-
-			// Conserver les données saisies
+			model.addAttribute( "alert", new Alert( Color.DANGER, e.getMessage() ) ); // Conserver les données saisies
 			model.addAttribute( "email", email );
 			model.addAttribute( "equipe", equipe );
 			model.addAttribute( "categorie", categorie );
+			model.addAttribute( "ticketRepas", ticketRepas );
 			model.addAttribute( "nom1", nom1 );
 			model.addAttribute( "prenom1", prenom1 );
 			model.addAttribute( "sexe1", sexe1 );

@@ -31,12 +31,16 @@ public class Participant {
 	private String		prenom;
 	@Column( "status" )
 	private String		status;				// capitaine ou suiveur
+	@Column( "nom_equipe" )
+	private String		nomEquipe;			// pseudo du compte
 	@Column( "sexe" )
 	private String		sexe;
+	@Column( "bol_d_air" )
+	private String		bolDAir;			// catégorie
 	@Column( "date_de_naissance" )
 	private LocalDate	dateNaissance;
 	@Column( "email" )
-	private String		email;
+	private String		email;				// même email que le compte
 	@Column( "certificat_médical" )
 	private String		certificatMedical;
 	@Column( "num_puce" )

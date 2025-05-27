@@ -54,11 +54,10 @@ public class ServiceInscriptionTest {
 		String		sexe2			= "femme";
 		String		statut2			= "suiveur";
 		LocalDate	dateNaissance2	= LocalDate.of( 1992, 8, 20 );
-
 		// Act
 		serviceInscription.inscrireEquipe(
 				email, motDePasse,
-				nomEquipe, categorie,
+				nomEquipe, categorie, "2", // 2 tickets repas
 				nom1, prenom1, sexe1, statut1, dateNaissance1,
 				nom2, prenom2, sexe2, statut2, dateNaissance2 );
 
@@ -69,20 +68,19 @@ public class ServiceInscriptionTest {
 		assert compte.getPseudo().equals( nomEquipe );
 		assert compte.getEmail().equals( email );
 		assert !compte.isRoleAdmin();
-		assert !compte.isRoleBenevol();
-
-		// Vérifier que l'équipe a été créée
+		assert !compte.isRoleBenevol(); // Vérifier que l'équipe a été créée
 		var equipe = daoEquipe.findByNomEquipe( nomEquipe );
 		assert equipe != null;
 		assert equipe.getNomEquipe().equals( nomEquipe );
 		assert equipe.getCategorie().equals( categorie );
-		assert equipe.getIdEpreuve().equals( 1L );
+		assert equipe.getNomBolDair().equals( "Bol d'Air" ); // Pour la catégorie "bol"
+		assert equipe.getTicketRepas().equals( "2" );
+		assert equipe.getIdEpreuve().equals( 2L ); // ID pour "Bol d'Air"
 		assert !equipe.getPaid();
 
 		// Vérifier que les participants ont été créés
 		var participants = daoParticipant.findByIdEquipe( equipe.getIdEquipe() );
 		assert participants.size() == 2;
-
 		var participant1 = participants.stream()
 				.filter( p -> p.getNom().equals( nom1 ) )
 				.findFirst()
@@ -91,8 +89,10 @@ public class ServiceInscriptionTest {
 		assert participant1.getPrenom().equals( prenom1 );
 		assert participant1.getSexe().equals( sexe1 );
 		assert participant1.getStatus().equals( statut1 );
+		assert participant1.getNomEquipe().equals( nomEquipe );
+		assert participant1.getBolDAir().equals( categorie );
+		assert participant1.getEmail().equals( email );
 		assert participant1.getDateNaissance().equals( dateNaissance1 );
-
 		var participant2 = participants.stream()
 				.filter( p -> p.getNom().equals( nom2 ) )
 				.findFirst()
@@ -101,6 +101,9 @@ public class ServiceInscriptionTest {
 		assert participant2.getPrenom().equals( prenom2 );
 		assert participant2.getSexe().equals( sexe2 );
 		assert participant2.getStatus().equals( statut2 );
+		assert participant2.getNomEquipe().equals( nomEquipe );
+		assert participant2.getBolDAir().equals( categorie );
+		assert participant2.getEmail().equals( email );
 		assert participant2.getDateNaissance().equals( dateNaissance2 );
 
 		System.out.println( "✅ Test réussi : L'inscription d'équipe fonctionne correctement !" );
@@ -118,7 +121,7 @@ public class ServiceInscriptionTest {
 		try {
 			serviceInscription.inscrireEquipe(
 					emailExistant, "motdepasse123",
-					"Nouvelle Équipe", "bol",
+					"Nouvelle Équipe", "bol", "1", // 1 ticket repas
 					"Test", "Test", "homme", "capitaine", LocalDate.of( 1990, 1, 1 ),
 					"Test2", "Test2", "femme", "suiveur", LocalDate.of( 1991, 1, 1 ) );
 			assert false : "Une exception devrait être levée pour un email déjà utilisé";
