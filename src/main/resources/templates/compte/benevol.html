@@ -54,7 +54,25 @@
                                     </tr>
                                     <tr>
                                         <th>Type:</th>
-                                        <td th:text="${benevol.interneExterne != null ? (benevol.interneExterne ? 'Interne' : 'Externe') : 'Non défini'}">type</td>
+                                        <td th:text="${benevol.interne != null ? (benevol.interne ? 'Interne' : 'Externe') : 'Non défini'}">type</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Disponibilité:</th>
+                                        <td>
+                                            <span th:if="${benevol.heureDebutDispo != null and benevol.heureFinDispo != null}">
+                                                De <span th:text="${#temporals.format(benevol.heureDebutDispo, 'HH:mm')}">08:00</span> 
+                                                à <span th:text="${#temporals.format(benevol.heureFinDispo, 'HH:mm')}">17:00</span>
+                                            </span>
+                                            <span th:unless="${benevol.heureDebutDispo != null and benevol.heureFinDispo != null}">Non définie</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Permis de conduire:</th>
+                                        <td th:text="${benevol.permis != null ? (benevol.permis ? 'Oui' : 'Non') : 'Non précisé'}">Non précisé</td>
+                                    </tr>
+                                    <tr th:if="${benevol.commentaire != null and !benevol.commentaire.trim().isEmpty()}">
+                                        <th>Commentaires:</th>
+                                        <td th:text="${benevol.commentaire}">commentaire</td>
                                     </tr>
                                 </table>
                             </div>

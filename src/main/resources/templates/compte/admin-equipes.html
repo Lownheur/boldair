@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Équipes - Le Bol d'Air</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <!-- Include the centralized header fragment with the admin tab active -->
+    <div th:replace="~{_fragments/header :: header('admin')}"></div>
+
+    <main>
+        <div class="container">
+            <div class="row mb-3">
+                <div class="col">
+                    <h1 class="page-title">Gestion des Équipes</h1>
+                </div>
+                <div class="col text-right">
+                    <a th:href="@{/compte/admin}" class="btn btn-secondary">Retour au tableau de bord</a>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <h2 class="card-heading">
+                    Liste des équipes 
+                    <span class="badge badge-primary" th:text="${teamCount}">0</span>
+                </h2>
+                
+                <!-- Filters -->
+                <div class="row mb-3">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="categorie-filter" class="form-label">Catégorie</label>
+                            <select id="categorie-filter" class="form-select">
+                                <option value="">Toutes les catégories</option>
+                                <option value="bol">Bol d'Air</option>
+                                <option value="mini">Mini Bol</option>
+                                <option value="decouverte">Découverte</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="paid-filter" class="form-label">Paiement</label>
+                            <select id="paid-filter" class="form-select">
+                                <option value="">Tous</option>
+                                <option value="true">Payé</option>
+                                <option value="false">Non payé</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="search" class="form-label">Rechercher</label>
+                            <input type="text" id="search" class="form-input" placeholder="Nom équipe...">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom de l'équipe</th>
+                                <th>Catégorie</th>
+                                <th>Bol d'Air</th>
+                                <th>Dossard</th>
+                                <th>Tickets repas</th>
+                                <th>Paiement</th>
+                                <th>Temps</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="equipe : ${teams}">
+                                <td th:text="${equipe.idEquipe}">1</td>
+                                <td th:text="${equipe.nomEquipe}">Nom équipe</td>
+                                <td th:text="${equipe.categorie}">Catégorie</td>
+                                <td th:text="${equipe.nomBolDair}">Bol d'Air</td>
+                                <td th:text="${equipe.numeroDossard ?: 'Non attribué'}">123</td>
+                                <td th:text="${equipe.ticketRepas ?: '0'}">2</td>
+                                <td>
+                                    <span th:if="${equipe.paid != null}">
+                                        <span th:if="${equipe.paid}" class="badge badge-success">Payé</span>
+                                        <span th:unless="${equipe.paid}" class="badge badge-error">Non payé</span>
+                                    </span>
+                                    <span th:unless="${equipe.paid != null}" class="badge badge-warning">Non défini</span>
+                                </td>
+                                <td th:text="${equipe.tempsRetenu ?: 'En attente'}">2h15m30s</td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm" th:onclick="'showTeamDetails(' + ${equipe.idEquipe} + ')'">Voir participants</button>
+                                    <button class="btn btn-secondary btn-sm">Modifier</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="text-center mt-3" th:if="${teams.empty}">
+                    <p class="text-muted">Aucune équipe inscrite pour le moment.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for team details -->
+    <div id="teamModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2 id="teamModalTitle">Détails de l'équipe</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div id="teamDetails">
+                <!-- Team details will be loaded here via AJAX -->
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/script.js}"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const teams = /*[[${teams}]]*/ [];
+        /*]]>*/
+        
+        // Filter functionality
+        document.getElementById('search').addEventListener('input', function() {
+            filterTable();
+        });
+        
+        document.getElementById('categorie-filter').addEventListener('change', function() {
+            filterTable();
+        });
+        
+        document.getElementById('paid-filter').addEventListener('change', function() {
+            filterTable();
+        });
+        
+        function filterTable() {
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const categorieFilter = document.getElementById('categorie-filter').value.toLowerCase();
+            const paidFilter = document.getElementById('paid-filter').value;
+            const rows = document.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const nomEquipe = row.children[1].textContent.toLowerCase();
+                const categorie = row.children[2].textContent.toLowerCase();
+                const paidText = row.children[6].textContent.toLowerCase();
+                
+                const matchesSearch = nomEquipe.includes(searchTerm);
+                const matchesCategorie = !categorieFilter || categorie.includes(categorieFilter);
+                let matchesPaid = true;
+                
+                if (paidFilter === 'true') {
+                    matchesPaid = paidText.includes('payé') && !paidText.includes('non payé');
+                } else if (paidFilter === 'false') {
+                    matchesPaid = paidText.includes('non payé');
+                }
+                
+                if (matchesSearch && matchesCategorie && matchesPaid) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        function showTeamDetails(teamId) {
+            // Find team in the teams array
+            const team = teams.find(t => t.idEquipe == teamId);
+            if (!team) {
+                alert('Équipe non trouvée');
+                return;
+            }
+            
+            // Create team details HTML
+            let detailsHTML = `
+                <div class="team-info">
+                    <h3>Informations de l'équipe</h3>
+                    <table class="table">
+                        <tr><th>Nom:</th><td>${team.nomEquipe || 'N/A'}</td></tr>
+                        <tr><th>Catégorie:</th><td>${team.categorie || 'N/A'}</td></tr>
+                        <tr><th>Bol d'Air:</th><td>${team.nomBolDair || 'N/A'}</td></tr>
+                        <tr><th>Dossard:</th><td>${team.numeroDossard || 'Non attribué'}</td></tr>
+                        <tr><th>Tickets repas:</th><td>${team.ticketRepas || '0'}</td></tr>
+                        <tr><th>Paiement:</th><td>${team.paid ? 'Payé' : 'Non payé'}</td></tr>
+                        <tr><th>Temps:</th><td>${team.tempsRetenu || 'En attente'}</td></tr>
+                    </table>
+                </div>
+                
+                <div class="participants-info mt-4">
+                    <h3>Participants</h3>
+                    <p class="text-muted">Chargement des participants...</p>
+                </div>
+            `;
+            
+            document.getElementById('teamModalTitle').textContent = `Équipe: ${team.nomEquipe}`;
+            document.getElementById('teamDetails').innerHTML = detailsHTML;
+            document.getElementById('teamModal').style.display = 'block';
+            
+            // Load participants via AJAX (this would be implemented with actual backend call)
+            loadTeamParticipants(teamId);
+        }
+        
+        function loadTeamParticipants(teamId) {
+            // This would make an AJAX call to get participants
+            // For now, show a placeholder
+            setTimeout(() => {
+                document.querySelector('.participants-info').innerHTML = `
+                    <h3>Participants</h3>
+                    <div class="alert alert-info">
+                        <p>Fonctionnalité de chargement des participants à implémenter.</p>
+                        <p>Équipe ID: ${teamId}</p>
+                    </div>
+                `;
+            }, 500);
+        }
+        
+        // Modal functionality
+        document.querySelector('.close').addEventListener('click', function() {
+            document.getElementById('teamModal').style.display = 'none';
+        });
+        
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('teamModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    </script>
+    
+    <style>
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .close {
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .close:hover {
+            color: #000;
+        }
+    </style>
+</body>
+</html> 

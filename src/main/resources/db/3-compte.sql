@@ -24,11 +24,5 @@ SELECT setval('compte_id_compte_seq', 10, false);
 -------
 
 -- Insert into Benevol table
-INSERT INTO Benevol (interne___externe, nom, email, téléphone, prénom, statut) VALUES
-(TRUE, 'Durand', 'mika@mail.com', '0612345678', 'Mikael', 'Actif');
-
--- Link the benevol to the compte (mika)
-INSERT INTO compte_benevol (Id_Benevol, id_compte)
-SELECT b.Id_Benevol, c.id_compte
-FROM Benevol b, compte c
-WHERE b.email = c.email AND c.pseudo = 'mika';
+INSERT INTO Benevol (interne___externe, nom, email, téléphone, prénom, statut, heure_debut_dispo, heure_fin_dispo, commentaire, permis, interne, id_compte) VALUES
+(TRUE, 'Durand', 'mika@mail.com', '0612345678', 'Mikael', 'Actif', '08:00', '16:00', 'Disponible sauf le midi', TRUE, TRUE, 3);

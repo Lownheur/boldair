@@ -33,4 +33,22 @@ public class Benevol {
 	private String	prénom;
 	@Column( "statut" )
 	private String	statut;
+
+	@Column( "heure_debut_dispo" )
+	private java.time.LocalTime heureDebutDispo;
+
+	@Column( "heure_fin_dispo" )
+	private java.time.LocalTime heureFinDispo;
+
+	@Column( "commentaire" )
+	private String commentaire;
+
+	@Column( "permis" )
+	private Boolean permis;
+
+	@Column( "interne" )
+	private Boolean interne;
+
+	@Column( "id_compte" )
+	private Long idCompte;
 }

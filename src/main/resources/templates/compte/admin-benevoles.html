@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Bénévoles - Le Bol d'Air</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <!-- Include the centralized header fragment with the admin tab active -->
+    <div th:replace="~{_fragments/header :: header('admin')}"></div>
+
+    <main>
+        <div class="container">
+            <div class="row mb-3">
+                <div class="col">
+                    <h1 class="page-title">Gestion des Bénévoles</h1>
+                </div>
+                <div class="col text-right">
+                    <a th:href="@{/compte/admin}" class="btn btn-secondary">Retour au tableau de bord</a>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <h2 class="card-heading">
+                    Liste des bénévoles 
+                    <span class="badge badge-primary" th:text="${volunteerCount}">0</span>
+                </h2>
+                
+                <!-- Filters -->
+                <div class="row mb-3">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="statut-filter" class="form-label">Statut</label>
+                            <select id="statut-filter" class="form-select">
+                                <option value="">Tous les statuts</option>
+                                <option value="étudiant">Étudiant</option>
+                                <option value="personnel">Personnel</option>
+                                <option value="externe">Externe</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="type-filter" class="form-label">Type</label>
+                            <select id="type-filter" class="form-select">
+                                <option value="">Tous les types</option>
+                                <option value="interne">Interne</option>
+                                <option value="externe">Externe</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="search" class="form-label">Rechercher</label>
+                            <input type="text" id="search" class="form-input" placeholder="Nom, prénom, email...">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Email</th>
+                                <th>Téléphone</th>
+                                <th>Statut</th>
+                                <th>Type</th>
+                                <th>Disponibilité</th>
+                                <th>Permis</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="benevol : ${volunteers}">
+                                <td th:text="${benevol.idBenevol}">1</td>
+                                <td th:text="${benevol.nom}">Nom</td>
+                                <td th:text="${benevol.prénom}">Prénom</td>
+                                <td th:text="${benevol.email}">email@example.com</td>
+                                <td th:text="${benevol.téléphone}">0123456789</td>
+                                <td th:text="${benevol.statut}">Statut</td>
+                                <td>
+                                    <span th:if="${benevol.interne != null}">
+                                        <span th:if="${benevol.interne}" class="badge badge-primary">Interne</span>
+                                        <span th:unless="${benevol.interne}" class="badge badge-secondary">Externe</span>
+                                    </span>
+                                    <span th:unless="${benevol.interne != null}" class="badge badge-warning">Non défini</span>
+                                </td>
+                                <td>
+                                    <span th:if="${benevol.heureDebutDispo != null and benevol.heureFinDispo != null}">
+                                        <small th:text="${#temporals.format(benevol.heureDebutDispo, 'HH:mm')} + ' - ' + ${#temporals.format(benevol.heureFinDispo, 'HH:mm')}">08:00 - 17:00</small>
+                                    </span>
+                                    <span th:unless="${benevol.heureDebutDispo != null and benevol.heureFinDispo != null}" class="text-muted">Non définie</span>
+                                </td>
+                                <td>
+                                    <span th:if="${benevol.permis != null}">
+                                        <span th:if="${benevol.permis}" class="badge badge-success">Oui</span>
+                                        <span th:unless="${benevol.permis}" class="badge badge-error">Non</span>
+                                    </span>
+                                    <span th:unless="${benevol.permis != null}" class="text-muted">-</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm" th:onclick="'showVolunteerDetails(' + ${benevol.idBenevol} + ')'">Détails</button>
+                                    <button class="btn btn-secondary btn-sm">Affecter</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="text-center mt-3" th:if="${volunteers.empty}">
+                    <p class="text-muted">Aucun bénévole inscrit pour le moment.</p>
+                </div>
+            </div>
+            
+            <!-- Comments section for volunteers with comments -->
+            <div class="card" th:if="${!volunteers.empty}">
+                <h3 class="card-heading">Commentaires des bénévoles</h3>
+                <div class="row">
+                    <div class="col" th:each="benevol : ${volunteers}" th:if="${benevol.commentaire != null and !benevol.commentaire.trim().isEmpty()}">
+                        <div class="card mb-3" style="background-color: var(--light-gray);">
+                            <h4 class="card-heading" th:text="${benevol.prénom + ' ' + benevol.nom}">Nom Prénom</h4>
+                            <p th:text="${benevol.commentaire}">Commentaire du bénévole</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for volunteer details -->
+    <div id="volunteerModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Détails du bénévole</h2>
+            <div id="volunteerDetails"></div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/script.js}"></script>
+    <script>
+        // Filter functionality
+        document.getElementById('search').addEventListener('input', function() {
+            filterTable();
+        });
+        
+        document.getElementById('statut-filter').addEventListener('change', function() {
+            filterTable();
+        });
+        
+        document.getElementById('type-filter').addEventListener('change', function() {
+            filterTable();
+        });
+        
+        function filterTable() {
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const statutFilter = document.getElementById('statut-filter').value.toLowerCase();
+            const typeFilter = document.getElementById('type-filter').value.toLowerCase();
+            const rows = document.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const nom = row.children[1].textContent.toLowerCase();
+                const prenom = row.children[2].textContent.toLowerCase();
+                const email = row.children[3].textContent.toLowerCase();
+                const statut = row.children[5].textContent.toLowerCase();
+                const type = row.children[6].textContent.toLowerCase();
+                
+                const matchesSearch = nom.includes(searchTerm) || prenom.includes(searchTerm) || email.includes(searchTerm);
+                const matchesStatut = !statutFilter || statut.includes(statutFilter);
+                const matchesType = !typeFilter || type.includes(typeFilter);
+                
+                if (matchesSearch && matchesStatut && matchesType) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        function showVolunteerDetails(id) {
+            // This would fetch details and show in modal
+            alert('Détails du bénévole ID: ' + id);
+        }
+    </script>
+</body>
+</html> 

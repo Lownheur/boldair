@@ -1,4 +1,3 @@
-
 -- Supprime tous les triggers du schema
 
 DO
@@ -23,22 +22,42 @@ $code$;
 DO
 $code$
 DECLARE
-	r RECORD;
+    r RECORD;
 BEGIN
-	FOR r IN
-		SELECT 'DROP FUNCTION ' || ns.nspname || '.' || proname
-            || '(' || oidvectortypes(proargtypes) || ')' AS sql
-		FROM pg_proc INNER JOIN pg_namespace ns ON (pg_proc.pronamespace = ns.oid)
-		WHERE ns.nspname = current_schema
-	LOOP
-		EXECUTE r.sql;
-	END LOOP;
+    FOR r IN
+        SELECT 'DROP FUNCTION IF EXISTS ' || ns.nspname || '.' || proname || '(' || oidvectortypes(proargtypes) || ')' AS sql
+        FROM pg_proc
+        INNER JOIN pg_namespace ns ON (pg_proc.pronamespace = ns.oid)
+        LEFT JOIN pg_depend d ON d.objid = pg_proc.oid AND d.deptype = 'e'
+        LEFT JOIN pg_extension e ON e.oid = d.refobjid
+        WHERE ns.nspname = current_schema
+        AND proname NOT IN (
+            'digest',
+            'hmac',
+            'crypt',
+            'gen_salt',
+            'encrypt',
+            'decrypt',
+            'encrypt_iv',
+            'decrypt_iv',
+            'gen_random_bytes',
+            'pgp_sym_encrypt',
+            'pgp_sym_decrypt',
+            'pgp_pub_encrypt',
+            'pgp_pub_decrypt',
+            'dearmor',
+            'armor',
+            'pgp_key_id',
+            'gen_random_uuid'
+        )
+        AND (e.extname IS NULL OR e.extname <> 'pgcrypto')
+        AND ns.nspname NOT IN ('pg_catalog', 'information_schema')
+    LOOP
+        EXECUTE r.sql;
+    END LOOP;
 END;
 $code$;
 
-
 -- Fonctions
-
-
 
 -- Triggers

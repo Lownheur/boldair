@@ -1,5 +1,7 @@
 package boldair.web;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
@@ -17,8 +19,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import boldair.dao.DaoBenevol;
 import boldair.dao.DaoCompte;
+import boldair.dao.DaoParticipant;
 import boldair.data.Benevol;
 import boldair.data.Compte;
+import boldair.data.Equipe;
+import boldair.data.Participant;
+import boldair.service.ServiceAdmin;
 import boldair.util.Alert;
 import boldair.util.Paging;
 import jakarta.annotation.security.RolesAllowed;
@@ -36,7 +42,9 @@ public class WebCompte {
 
 	private final DaoCompte daoCompte;
 	private final DaoBenevol daoBenevol;
+	private final DaoParticipant daoParticipant;
 	private final PasswordEncoder encoder;
+	private final ServiceAdmin serviceAdmin;
 
 	// -------
 	// Attributs de session
@@ -59,8 +67,36 @@ public class WebCompte {
 
 	@GetMapping("/admin")
 	@RolesAllowed("ADMIN")
-	public String adminDashboard() {
+	public String adminDashboard(Model model) {
+		// Add statistics to the model
+		model.addAttribute("volunteerCount", serviceAdmin.getVolunteerCount());
+		model.addAttribute("teamCount", serviceAdmin.getTeamCount());
 		return "compte/admin";
+	}
+	
+	@GetMapping("/admin/benevoles")
+	@RolesAllowed("ADMIN")
+	public String adminVolunteers(Model model) {
+		List<Benevol> volunteers = serviceAdmin.getAllVolunteers();
+		model.addAttribute("volunteers", volunteers);
+		model.addAttribute("volunteerCount", volunteers.size());
+		return "compte/admin-benevoles";
+	}
+	
+	@GetMapping("/admin/equipes")
+	@RolesAllowed("ADMIN")
+	public String adminTeams(Model model) {
+		List<Equipe> teams = serviceAdmin.getAllTeams();
+		model.addAttribute("teams", teams);
+		model.addAttribute("teamCount", teams.size());
+		
+		// Also get participants for each team
+		for (Equipe team : teams) {
+			List<Participant> participants = serviceAdmin.getTeamParticipants(team.getIdEquipe());
+			// Add participants to a map or handle them in template
+		}
+		
+		return "compte/admin-equipes";
 	}
 	
 	@GetMapping("/benevol")
@@ -89,126 +125,102 @@ public class WebCompte {
 
 	// -------
 	// listContent()
-
-	@PostMapping("/list/content")
-	@RolesAllowed("ADMIN")
-	public String getListContent(Paging paging, Model model) {
-
-		var page = getPage(paging);
-
-		// Si la n° de page demandé est > au nombre total, on affiche la dernière page 
-		if (paging.getPageNum() > page.getTotalPages() && page.getTotalPages() > 0) {
-			paging.setPageNum(page.getTotalPages());
-			page = getPage(paging);
-		}
-
-		model.addAttribute("list", page.getContent());
-		model.addAttribute("totalItems", page.getTotalElements());
-		model.addAttribute("totalPages", page.getTotalPages());
-		return "compte/list :: #dynamic_view";
-
-	}
-
 	// -------
-	// list() - GET
 
 	@GetMapping("/list")
 	@RolesAllowed("ADMIN")
-	public String list(Paging paging, Model model) {
+	public String listContent(Model model, @ModelAttribute("pagingCompte") Paging paging) {
 
-		getListContent(paging, model);
+		// -------
+		// Génération des données
+		// -------
+
+		Page<Compte> pageCompte = daoCompte.findAll(PageRequest.of(paging.getPageNo(), paging.getPageSize()));
+
+		// -------
+		// Enrichissement du modèle
+		// -------
+
+		model.addAttribute("pageCompte", pageCompte);
+
 		return "compte/list";
-
 	}
 
 	// -------
-	// list() - POST
+	// newContent()
+	// -------
 
-	@PostMapping("/list")
+	@GetMapping("/new")
 	@RolesAllowed("ADMIN")
-	public String list() {
+	public String newContent(Model model) {
+
+		// -------
+		// Enrichissement du modèle
+		// -------
+
+		model.addAttribute("compte", new Compte());
+
+		return "compte/new";
+	}
+
+	// -------
+	// saveContent()
+	// -------
+
+	@PostMapping("/save")
+	@RolesAllowed("ADMIN")
+	public String saveContent(Model model, @ModelAttribute Compte compte, BindingResult bindingResult,
+			RedirectAttributes redirectAttributes) {
+
+		// -------
+		// Contrôles
+		// -------
+
+		if (bindingResult.hasErrors()) {
+			return "compte/new";
+		}
+
+		// -------
+		// Encodage du mot de passe
+		// -------
+
+		compte.setEmpreinteMdp(encoder.encode(compte.getEmpreinteMdp()));
+
+		// -------
+		// Sauvegarde
+		// -------
+
+		daoCompte.save(compte);
+
+		// -------
+		// Redirection
+		// -------
+
+		redirectAttributes.addFlashAttribute("alert", new Alert("Compte créé avec succès", Alert.Color.SUCCESS));
+
 		return "redirect:/compte/list";
 	}
 
 	// -------
-	// edit()
-
-	@GetMapping(path = "/form")
-	@RolesAllowed("ADMIN")
-	public String edit(Long id, Model model) {
-
-		Compte item;
-		if (id == null) {
-			item = new Compte();
-		} else {
-			item = daoCompte.findById(id).get();
-		}
-
-		model.addAttribute("item", item);
-		return "compte/form";
-
-	}
-
+	// deleteContent()
 	// -------
-	// save()
-
-	@PostMapping("/form")
-	@RolesAllowed("ADMIN")
-	public String save(
-			@ModelAttribute("item") Compte item,
-			BindingResult result,
-			RedirectAttributes ra) {
-
-		if (!daoCompte.verifierUnicitePseudo(item.getPseudo(), item.getIdCompte())) {
-			result.rejectValue("pseudo", "", "Ce pseudo est déjà utilisé");
-		}
-		if (!daoCompte.verifierUniciteEmail(item.getEmail(), item.getIdCompte())) {
-			result.rejectValue("email", "", "Cet e-mail  est déjà utilisé");
-		}
-		if (result.hasErrors()) {
-			return "compte/form";
-		}
-
-		if (!item.getMotDePasse().isBlank()) {
-			item.setEmpreinteMdp(encoder.encode(item.getMotDePasse()));
-		}
-		daoCompte.save(item);
-
-		ra.addFlashAttribute("alert", new Alert(Alert.Color.SUCCESS, "Mise à jour effectuée avec succès"));
-		return "redirect:/compte/list";
-
-	}
-
-	// -------
-	// listContent()
 
 	@PostMapping("/delete")
 	@RolesAllowed("ADMIN")
-	public String delete(Long id, Paging paging, Model model) {
+	public String deleteContent(@ModelAttribute Compte compte, RedirectAttributes redirectAttributes) {
 
-		daoCompte.deleteById(id);
-		model.addAttribute("alert", new Alert(Alert.Color.SUCCESS, "Suppression effectuée avec succès"));
-		return getListContent(paging, model);
+		// -------
+		// Suppression
+		// -------
 
-	}
+		daoCompte.delete(compte);
 
-	// -------
-	// Méthodes auxiliaires
-	// ------
+		// -------
+		// Redirection
+		// -------
 
-	private Page<Compte> getPage(Paging paging) {
+		redirectAttributes.addFlashAttribute("alert", new Alert("Compte supprimé", Alert.Color.WARNING));
 
-		var pageable = PageRequest.of(paging.getPageNum() - 1, paging.getPageSize());
-
-		Page<Compte> page;
-		if (paging.getSearch() == null) {
-			page = daoCompte.findAllByOrderByPseudo(pageable);
-		} else {
-			page = daoCompte.findByPseudoContainingIgnoreCaseOrEmailContainingIgnoreCaseOrderByPseudo(
-					paging.getSearch(), paging.getSearch(), pageable);
-		}
-
-		return page;
-
+		return "redirect:/compte/list";
 	}
 }

@@ -28,6 +28,7 @@ public class Init_DB {
 			"/db/3_delete.sql",
 			"/db/3-compte.sql",
 			"/db/4-epreuve-data.sql",
+			"/db/5-roles.sql",
 	} )
 	void db_3_Data() {
 	}

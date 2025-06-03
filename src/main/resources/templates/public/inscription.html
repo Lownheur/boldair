@@ -43,10 +43,10 @@
           </div>
         </div>
 
-        <div th:if="${alert}" th:class="'alert alert-' + ${alert.color.name().toLowerCase()} + ' mb-3'">
+        <div th:if="${alert}" th:class="'alert alert-' + ${alert.color} + ' mb-3'">
           <div class="icon-text">
-            <span class="icon" th:text="${alert.color.name() == 'DANGER' ? '❌' : '✅'}"></span>
-            <span th:text="${alert.message}"></span>
+            <span class="icon" th:text="${alert.color == 'danger' ? '❌' : '✅'}"></span>
+            <span th:text="${alert.html}"></span>
           </div>
         </div>
 
@@ -204,41 +204,66 @@
           </div>
         </div>
 
-        <form>
+        <form action="/inscription-benevole" method="post">
           <div class="row">
             <div class="col">
               <div class="form-group">
                 <label for="nom-benevole" class="form-label">Nom *</label>
-                <input type="text" id="nom-benevole" class="form-input" required>
+                <input type="text" id="nom-benevole" name="nom" class="form-input" required>
               </div>
 
               <div class="form-group">
                 <label for="prenom-benevole" class="form-label">Prénom *</label>
-                <input type="text" id="prenom-benevole" class="form-input" required>
+                <input type="text" id="prenom-benevole" name="prenom" class="form-input" required>
               </div>
 
               <div class="form-group">
                 <label for="email-benevole" class="form-label">Email *</label>
-                <input type="email" id="email-benevole" class="form-input" required>
+                <input type="email" id="email-benevole" name="email" class="form-input" required>
               </div>
             </div>
 
             <div class="col">
               <div class="form-group">
                 <label for="tel-benevole" class="form-label">Téléphone *</label>
-                <input type="tel" id="tel-benevole" class="form-input" required>
+                <input type="tel" id="tel-benevole" name="tel-benevole" class="form-input" required>
               </div>
 
               <div class="form-group">
                 <label for="password-benevole" class="form-label">Mot de passe *</label>
-                <input type="password" id="password-benevole" class="form-input" required>
+                <input type="password" id="password-benevole" name="password-benevole" class="form-input" required>
               </div>
 
               <div class="form-group">
                 <label for="password-confirm-benevole" class="form-label">Confirmation mot de passe *</label>
-                <input type="password" id="password-confirm-benevole" class="form-input" required>
+                <input type="password" id="password-confirm-benevole" name="password-confirm-benevole" class="form-input" required>
               </div>
             </div>
+          </div>
+
+          <div class="form-group">
+            <label for="statut" class="form-label">Statut *</label>
+            <input type="text" id="statut" name="statut" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label for="heure-debut-dispo" class="form-label">Heure de début de disponibilité *</label>
+            <input type="time" id="heure-debut-dispo" name="heure_debut_dispo" class="form-input" min="06:00" max="18:00" required>
+          </div>
+          <div class="form-group">
+            <label for="heure-fin-dispo" class="form-label">Heure de fin de disponibilité *</label>
+            <input type="time" id="heure-fin-dispo" name="heure_fin_dispo" class="form-input" min="06:00" max="18:00" required>
+          </div>
+          <div class="form-group">
+            <label for="commentaire" class="form-label">Commentaire (contraintes, préférences, etc.)</label>
+            <textarea id="commentaire" name="commentaire" class="form-input" maxlength="500" rows="3" placeholder="Spécifiez ici vos contraintes ou préférences pour les rôles (500 caractères max)"></textarea>
+          </div>
+          <div class="form-group">
+            <input type="checkbox" id="permis" name="permis" class="form-checkbox">
+            <label for="permis">J'ai le permis de conduire</label>
+          </div>
+          <div class="form-group">
+            <input type="checkbox" id="interne" name="interne" class="form-checkbox">
+            <label for="interne">Je suis interne à l'organisation</label>
           </div>
 
           <button type="submit" class="btn btn-primary btn-block">Soumettre ma candidature</button>
