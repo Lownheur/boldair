@@ -1,4 +1,7 @@
-INSERT INTO Roles (NomRole, quantité, type_benevole, horaire, bénévoles) VALUES
+-- Set search path to boldair schema
+SET search_path TO boldair, public;
+
+INSERT INTO roles (nomrole, quantité, type_benevole, horaire, bénévoles) VALUES
 ('Parking voiture / Parking vélo', '2', 'M', '7h – 9h', NULL),
 ('Remise des dossards', '4', 'M', '7h - 9h', NULL),
 ('Signaleur', '37 postes', 'M et E', '8h30 – 13h30', NULL),

@@ -48,7 +48,9 @@ public class Benevol {
 
 	@Column( "interne" )
 	private Boolean interne;
-
 	@Column( "id_compte" )
 	private Long idCompte;
+
+	@Column( "id_role" )
+	private Long idRole;
 }

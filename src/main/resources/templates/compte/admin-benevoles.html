@@ -12,13 +12,68 @@
     <div th:replace="~{_fragments/header :: header('admin')}"></div>
 
     <main>
-        <div class="container">
-            <div class="row mb-3">
+        <div class="container">            <div class="row mb-3">
                 <div class="col">
                     <h1 class="page-title">Gestion des Bénévoles</h1>
                 </div>
                 <div class="col text-right">
                     <a th:href="@{/compte/admin}" class="btn btn-secondary">Retour au tableau de bord</a>
+                </div>
+            </div>
+            
+            <!-- Statistiques des rôles -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <h3 class="card-heading">Postes restants</h3>
+                        <h2 class="text-primary" th:text="${totalPostesRestants}">0</h2>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <h3 class="card-heading">Bénévoles</h3>
+                        <h2 class="text-info" th:text="${volunteerCount}">0</h2>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <h3 class="card-heading">Rôles disponibles</h3>
+                        <h2 class="text-success" th:text="${#lists.size(allRoles)}">0</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- État des rôles -->
+            <div class="card mb-4">
+                <h2 class="card-heading">État des affectations par rôle</h2>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Rôle</th>
+                                <th>Type</th>
+                                <th>Horaire</th>
+                                <th>Requis</th>
+                                <th>Affectés</th>
+                                <th>Restants</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="roleAffectation : ${rolesAvecAffectation}">
+                                <td th:text="${roleAffectation.role.nomRole}">Nom du rôle</td>
+                                <td th:text="${roleAffectation.role.typeBenevole}">Type</td>
+                                <td th:text="${roleAffectation.role.horaire}">Horaire</td>
+                                <td th:text="${roleAffectation.quantiteRequise}">0</td>
+                                <td th:text="${roleAffectation.quantiteAffectee}">0</td>
+                                <td th:text="${roleAffectation.quantiteRestante}">0</td>
+                                <td>
+                                    <span th:class="${roleAffectation.complet ? 'badge badge-success' : (roleAffectation.quantiteAffectee > 0 ? 'badge badge-warning' : 'badge badge-danger')}"
+                                          th:text="${roleAffectation.statutAffectation}">Statut</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             
@@ -56,12 +111,10 @@
                             <label for="search" class="form-label">Rechercher</label>
                             <input type="text" id="search" class="form-input" placeholder="Nom, prénom, email...">
                         </div>
-                    </div>
-                </div>
+                    </div>                </div>
                 
                 <div class="table-responsive">
-                    <table class="table">
-                        <thead>
+                    <table id="volunteersTable" class="table">                        <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Nom</th>
@@ -72,6 +125,7 @@
                                 <th>Type</th>
                                 <th>Disponibilité</th>
                                 <th>Permis</th>
+                                <th>Rôle</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -95,17 +149,39 @@
                                         <small th:text="${#temporals.format(benevol.heureDebutDispo, 'HH:mm')} + ' - ' + ${#temporals.format(benevol.heureFinDispo, 'HH:mm')}">08:00 - 17:00</small>
                                     </span>
                                     <span th:unless="${benevol.heureDebutDispo != null and benevol.heureFinDispo != null}" class="text-muted">Non définie</span>
-                                </td>
-                                <td>
+                                </td>                                <td>
                                     <span th:if="${benevol.permis != null}">
                                         <span th:if="${benevol.permis}" class="badge badge-success">Oui</span>
                                         <span th:unless="${benevol.permis}" class="badge badge-error">Non</span>
                                     </span>
                                     <span th:unless="${benevol.permis != null}" class="text-muted">-</span>
+                                </td>                                <td>
+                                    <span th:if="${volunteerRoles.containsKey(benevol.idBenevol)}" 
+                                          th:text="${volunteerRoles.get(benevol.idBenevol).nomRole}" 
+                                          class="badge badge-info">
+                                        Rôle affecté
+                                    </span>
+                                    <span th:unless="${volunteerRoles.containsKey(benevol.idBenevol)}" 
+                                          class="badge badge-secondary">
+                                        Rôle non affecté
+                                    </span>
                                 </td>
                                 <td>
-                                    <button class="btn btn-outline btn-sm" th:onclick="'showVolunteerDetails(' + ${benevol.idBenevol} + ')'">Détails</button>
-                                    <button class="btn btn-secondary btn-sm">Affecter</button>
+                                    <button th:unless="${volunteerRoles.containsKey(benevol.idBenevol)}"
+                                            class="btn btn-primary btn-sm" 
+                                            th:onclick="'showRoleAssignment(' + ${benevol.idBenevol} + ')'">
+                                        Affecter rôle
+                                    </button>
+                                    <div th:if="${volunteerRoles.containsKey(benevol.idBenevol)}">
+                                        <button class="btn btn-warning btn-sm" 
+                                                th:onclick="'showRoleAssignment(' + ${benevol.idBenevol} + ')'">
+                                            Modifier rôle
+                                        </button>
+                                        <button class="btn btn-danger btn-sm ml-1" 
+                                                th:onclick="'removeRoleConfirm(' + ${benevol.idBenevol} + ', ' + ${volunteerRoles.get(benevol.idBenevol).idRoles} + ')'">
+                                            Retirer rôle
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -130,9 +206,7 @@
                 </div>
             </div>
         </div>
-    </main>
-
-    <!-- Modal for volunteer details -->
+    </main>    <!-- Modal for volunteer details -->
     <div id="volunteerModal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -140,6 +214,31 @@
             <div id="volunteerDetails"></div>
         </div>
     </div>
+
+    <!-- Modal for role assignment -->
+    <div id="roleAssignmentModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Affecter un rôle</h2>
+            <form th:action="@{/compte/assign-role}" method="post">
+                <input type="hidden" id="benevolIdInput" name="benevolId">
+                <div class="form-group">
+                    <label for="roleSelect" class="form-label">Sélectionner un rôle :</label>
+                    <select id="roleSelect" name="roleId" class="form-select" required>
+                        <option value="">-- Choisir un rôle --</option>
+                        <option th:each="role : ${allRoles}" 
+                                th:value="${role.idRoles}" 
+                                th:text="${role.nomRole + ' (' + role.horaire + ')'}">
+                            Rôle
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary">Affecter</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeRoleAssignmentModal()">Annuler</button>
+                </div>
+            </form>
+        </div>    </div>
 
     <script th:src="@{/js/script.js}"></script>
     <script>
@@ -155,12 +254,11 @@
         document.getElementById('type-filter').addEventListener('change', function() {
             filterTable();
         });
-        
-        function filterTable() {
+          function filterTable() {
             const searchTerm = document.getElementById('search').value.toLowerCase();
             const statutFilter = document.getElementById('statut-filter').value.toLowerCase();
             const typeFilter = document.getElementById('type-filter').value.toLowerCase();
-            const rows = document.querySelectorAll('tbody tr');
+            const rows = document.querySelectorAll('#volunteersTable tbody tr');
             
             rows.forEach(row => {
                 const nom = row.children[1].textContent.toLowerCase();
@@ -185,6 +283,46 @@
             // This would fetch details and show in modal
             alert('Détails du bénévole ID: ' + id);
         }
+        
+        function showRoleAssignment(benevolId) {
+            document.getElementById('benevolIdInput').value = benevolId;
+            document.getElementById('roleAssignmentModal').style.display = 'block';
+        }
+          function closeRoleAssignmentModal() {
+            document.getElementById('roleAssignmentModal').style.display = 'none';
+            document.getElementById('roleSelect').value = '';
+        }
+        
+        function removeRoleConfirm(benevolId, roleId) {
+            if (confirm('Êtes-vous sûr de vouloir retirer ce rôle ?')) {
+                // Create a form and submit it
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/compte/remove-role';
+                
+                const benevolInput = document.createElement('input');
+                benevolInput.type = 'hidden';
+                benevolInput.name = 'benevolId';
+                benevolInput.value = benevolId;
+                
+                const roleInput = document.createElement('input');
+                roleInput.type = 'hidden';
+                roleInput.name = 'roleId';
+                roleInput.value = roleId;
+                
+                form.appendChild(benevolInput);
+                form.appendChild(roleInput);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+          // Close modals when clicking on X or outside
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('close') || event.target.classList.contains('modal')) {
+                closeRoleAssignmentModal();
+                document.getElementById('volunteerModal').style.display = 'none';
+            }
+        });
     </script>
 </body>
-</html> 
+</html>

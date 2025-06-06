@@ -1,6 +1,8 @@
 package boldair.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,18 +14,22 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import boldair.dao.DaoBenevol;
 import boldair.dao.DaoCompte;
-import boldair.dao.DaoParticipant;
+import boldair.dao.DaoRole;
 import boldair.data.Benevol;
 import boldair.data.Compte;
 import boldair.data.Equipe;
-import boldair.data.Participant;
+import boldair.data.Role;
+import boldair.data.RoleAvecAffectation;
 import boldair.service.ServiceAdmin;
 import boldair.util.Alert;
 import boldair.util.Paging;
@@ -35,14 +41,12 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/compte")
 @SessionAttributes("pagingCompte")
 public class WebCompte {
-
 	// -------
 	// Composants injectés
 	// -------
-
 	private final DaoCompte daoCompte;
 	private final DaoBenevol daoBenevol;
-	private final DaoParticipant daoParticipant;
+	private final DaoRole daoRole;
 	private final PasswordEncoder encoder;
 	private final ServiceAdmin serviceAdmin;
 
@@ -73,13 +77,45 @@ public class WebCompte {
 		model.addAttribute("teamCount", serviceAdmin.getTeamCount());
 		return "compte/admin";
 	}
-	
 	@GetMapping("/admin/benevoles")
 	@RolesAllowed("ADMIN")
 	public String adminVolunteers(Model model) {
 		List<Benevol> volunteers = serviceAdmin.getAllVolunteers();
+		List<RoleAvecAffectation> rolesAvecAffectation = serviceAdmin.getAllRolesWithAffectation();
+		List<Role> allRoles = serviceAdmin.getAllRoles();
+		
+		System.out.println("Nombre de bénévoles: " + volunteers.size());
+		System.out.println("Nombre de rôles: " + allRoles.size());
+		System.out.println("Nombre de rôles avec affectation: " + rolesAvecAffectation.size());
+		
+		if (!rolesAvecAffectation.isEmpty()) {
+			System.out.println("Premier rôle: " + rolesAvecAffectation.get(0).getRole().getNomRole());
+			System.out.println("Quantité requise: " + rolesAvecAffectation.get(0).getQuantiteRequise());
+			System.out.println("Quantité affectée: " + rolesAvecAffectation.get(0).getQuantiteAffectee());
+			System.out.println("Quantité restante: " + rolesAvecAffectation.get(0).getQuantiteRestante());
+		}
+				// Create a map of volunteer roles for easy access in template
+		Map<Long, Role> volunteerRoles = new HashMap<>();
+		for (Benevol volunteer : volunteers) {
+			if (volunteer.getIdRole() != null) {
+				// Use the role directly from the database to ensure fresh data
+				Role role = daoRole.findById(volunteer.getIdRole()).orElse(null);
+				if (role != null) {
+					volunteerRoles.put(volunteer.getIdBenevol(), role);
+					System.out.println("Bénévole " + volunteer.getIdBenevol() + " a le rôle: " + role.getNomRole());
+				}
+			} else {
+				System.out.println("Bénévole " + volunteer.getIdBenevol() + " n'a pas de rôle");
+			}
+		}
+		
 		model.addAttribute("volunteers", volunteers);
 		model.addAttribute("volunteerCount", volunteers.size());
+		model.addAttribute("rolesAvecAffectation", rolesAvecAffectation);
+		model.addAttribute("allRoles", allRoles);
+		model.addAttribute("volunteerRoles", volunteerRoles);
+		model.addAttribute("totalPostesRestants", serviceAdmin.getTotalPostesRestants());
+		
 		return "compte/admin-benevoles";
 	}
 	
@@ -89,10 +125,9 @@ public class WebCompte {
 		List<Equipe> teams = serviceAdmin.getAllTeams();
 		model.addAttribute("teams", teams);
 		model.addAttribute("teamCount", teams.size());
-		
-		// Also get participants for each team
+				// Also get participants for each team
 		for (Equipe team : teams) {
-			List<Participant> participants = serviceAdmin.getTeamParticipants(team.getIdEquipe());
+			serviceAdmin.getTeamParticipants(team.getIdEquipe());
 			// Add participants to a map or handle them in template
 		}
 		
@@ -130,12 +165,11 @@ public class WebCompte {
 	@GetMapping("/list")
 	@RolesAllowed("ADMIN")
 	public String listContent(Model model, @ModelAttribute("pagingCompte") Paging paging) {
-
 		// -------
 		// Génération des données
 		// -------
 
-		Page<Compte> pageCompte = daoCompte.findAll(PageRequest.of(paging.getPageNo(), paging.getPageSize()));
+		Page<Compte> pageCompte = daoCompte.findAll(PageRequest.of(paging.getPageNum(), paging.getPageSize()));
 
 		// -------
 		// Enrichissement du modèle
@@ -191,12 +225,11 @@ public class WebCompte {
 		// -------
 
 		daoCompte.save(compte);
-
 		// -------
 		// Redirection
 		// -------
 
-		redirectAttributes.addFlashAttribute("alert", new Alert("Compte créé avec succès", Alert.Color.SUCCESS));
+		redirectAttributes.addFlashAttribute("alert", new Alert(Alert.Color.SUCCESS, "Compte créé avec succès"));
 
 		return "redirect:/compte/list";
 	}
@@ -214,13 +247,81 @@ public class WebCompte {
 		// -------
 
 		daoCompte.delete(compte);
-
 		// -------
 		// Redirection
 		// -------
 
-		redirectAttributes.addFlashAttribute("alert", new Alert("Compte supprimé", Alert.Color.WARNING));
+		redirectAttributes.addFlashAttribute("alert", new Alert(Alert.Color.WARNING, "Compte supprimé"));
 
 		return "redirect:/compte/list";
+	}
+	
+	// -------
+	// assignRole()
+	// -------
+	@PostMapping("/assign-role")
+	@RolesAllowed("ADMIN")
+	public String assignRole(@RequestParam("benevolId") Long benevolId, 
+							@RequestParam("roleId") Long roleId, 
+							RedirectAttributes redirectAttributes) {
+		
+		try {
+			System.out.println("=== DEBUT WebCompte.assignRole ===");
+			System.out.println("benevolId reçu: " + benevolId);
+			System.out.println("roleId reçu: " + roleId);
+			
+			boolean success = serviceAdmin.assignRoleToBenevol(benevolId, roleId);
+			
+			if (success) {
+				redirectAttributes.addFlashAttribute("alert", 
+					new Alert(Alert.Color.SUCCESS, "Rôle affecté avec succès"));
+				System.out.println("Affectation réussie");
+			} else {
+				redirectAttributes.addFlashAttribute("alert", 
+					new Alert(Alert.Color.DANGER, "Erreur lors de l'affectation du rôle"));
+				System.out.println("Affectation échouée");
+			}
+			
+		} catch (Exception e) {
+			System.err.println("Exception dans WebCompte.assignRole: " + e.getMessage());
+			e.printStackTrace();
+			redirectAttributes.addFlashAttribute("alert", 
+				new Alert(Alert.Color.DANGER, "Erreur technique lors de l'affectation"));
+		}
+		
+		System.out.println("=== FIN WebCompte.assignRole ===");
+		return "redirect:/compte/admin/benevoles";
+	}
+	
+	// -------
+	// removeRole()
+	// -------
+		@PostMapping("/remove-role")
+	@RolesAllowed("ADMIN")
+	public String removeRole(@RequestParam("benevolId") Long benevolId, 
+							@RequestParam("roleId") Long roleId, 
+							RedirectAttributes redirectAttributes) {
+		
+		boolean success = serviceAdmin.removeRoleFromBenevol(benevolId, roleId);
+		
+		if (success) {
+			redirectAttributes.addFlashAttribute("alert", 
+				new Alert(Alert.Color.WARNING, "Rôle retiré avec succès"));
+		} else {
+			redirectAttributes.addFlashAttribute("alert", 
+				new Alert(Alert.Color.DANGER, "Erreur lors de la suppression du rôle"));
+		}
+		
+		return "redirect:/compte/admin/benevoles";
+	}
+	
+	// -------	// getBenevolRole() - AJAX endpoint
+	// -------
+	
+	@GetMapping("/benevol/{benevolId}/roles")
+	@RolesAllowed("ADMIN")
+	@ResponseBody
+	public Role getBenevolRole(@PathVariable Long benevolId) {
+		return serviceAdmin.getBenevolRole(benevolId);
 	}
 }
