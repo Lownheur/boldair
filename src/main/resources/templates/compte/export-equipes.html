@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export Équipes - Le Bol d'Air</title>
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+            body { margin: 0; }
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: white;
+        }
+        
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #2c5aa0;
+            margin: 0;
+            font-size: 28px;
+        }
+        
+        .header .subtitle {
+            color: #666;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        
+        .export-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2c5aa0;
+        }
+        
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-box {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            min-width: 150px;
+            margin: 5px;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c5aa0;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .table-container {
+            margin-top: 30px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 11px;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 6px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #2c5aa0;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .badge {
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .badge-success { background-color: #d4edda; color: #155724; }
+        .badge-danger { background-color: #f8d7da; color: #721c24; }
+        .badge-info { background-color: #d1ecf1; color: #0c5460; }
+        .badge-primary { background-color: #d6d8db; color: #383d41; }
+        .badge-warning { background-color: #fff3cd; color: #856404; }
+        
+        .team-section {
+            margin-bottom: 40px;
+            page-break-inside: avoid;
+        }
+        
+        .team-header {
+            background: #2c5aa0;
+            color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        
+        .participants-table {
+            font-size: 10px;
+            margin-left: 20px;
+        }
+        
+        .participants-table th {
+            background-color: #6c757d;
+        }
+        
+        .print-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background-color: #2c5aa0;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .btn:hover {
+            opacity: 0.8;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+        
+        @page {
+            margin: 1cm;
+        }
+    </style>
+</head>
+<body>
+    <!-- Print Controls -->
+    <div class="print-controls no-print">
+        <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimer</button>
+        <a href="#" class="btn btn-secondary" onclick="window.close()">✖️ Fermer</a>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>Le Bol d'Air - Liste des Équipes</h1>
+        <div class="subtitle">Gestion des inscriptions et participants</div>
+    </div>
+
+    <!-- Export Info -->
+    <div class="export-info">
+        <strong>Rapport généré le :</strong> 
+        <span th:text="${#temporals.format(exportDate, 'dd/MM/yyyy à HH:mm')}">10/06/2025 à 14:30</span>
+        <br>
+        <strong>Nombre total d'équipes :</strong> 
+        <span th:text="${teamCount}">0</span>
+        <br>
+        <strong>Nombre total de participants :</strong>
+        <span th:text="${#aggregates.sum(teamParticipants.values().![size])}">0</span>
+    </div>
+
+    <!-- Statistics -->
+    <div class="stats-row">
+        <div class="stat-box">
+            <div class="stat-number" th:text="${teamCount}">0</div>
+            <div class="stat-label">Équipes inscrites</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" th:text="${#aggregates.sum(teamParticipants.values().![size])}">0</div>
+            <div class="stat-label">Participants total</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" th:text="${#lists.size(teams.?[paid == true])}">0</div>
+            <div class="stat-label">Équipes payées</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" th:text="${#lists.size(teams.?[paid == false or paid == null])}">0</div>
+            <div class="stat-label">Paiements en attente</div>
+        </div>
+    </div>
+
+    <!-- Summary Table -->
+    <div class="table-container">
+        <h2>Résumé des équipes</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom de l'équipe</th>
+                    <th>Catégorie</th>
+                    <th>Épreuve</th>
+                    <th>Dossard</th>
+                    <th>Participants</th>
+                    <th>Tickets repas</th>
+                    <th>Paiement</th>
+                    <th>Temps</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="equipe : ${teams}">
+                    <td th:text="${equipe.idEquipe}">1</td>
+                    <td th:text="${equipe.nomEquipe}">Nom équipe</td>
+                    <td th:text="${equipe.categorie}">Catégorie</td>
+                    <td th:text="${equipe.nomBolDair}">Bol d'Air</td>
+                    <td th:text="${equipe.numeroDossard ?: 'Non attribué'}">123</td>
+                    <td th:text="${teamParticipants.get(equipe.idEquipe)?.size() ?: 0}">2</td>
+                    <td th:text="${equipe.ticketRepas ?: '0'}">2</td>
+                    <td>
+                        <span th:if="${equipe.paid != null}">
+                            <span th:if="${equipe.paid}" class="badge badge-success">Payé</span>
+                            <span th:unless="${equipe.paid}" class="badge badge-danger">Non payé</span>
+                        </span>
+                        <span th:unless="${equipe.paid != null}" class="badge badge-warning">Non défini</span>
+                    </td>
+                    <td th:text="${equipe.tempsRetenu ?: 'En attente'}">2h15m30s</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div th:if="${teams.empty}">
+            <p style="text-align: center; color: #666; margin: 40px 0;">Aucune équipe inscrite pour le moment.</p>
+        </div>
+    </div>
+
+    <!-- Detailed Teams with Participants -->
+    <div th:if="${!teams.empty}" style="margin-top: 50px;">
+        <h2>Détail des équipes et participants</h2>
+        
+        <div th:each="equipe : ${teams}" class="team-section">
+            <div class="team-header">
+                <strong th:text="${equipe.nomEquipe}">Nom de l'équipe</strong>
+                - <span th:text="${equipe.categorie}">Catégorie</span>
+                - Épreuve: <span th:text="${equipe.nomBolDair}">Bol d'Air</span>
+                <span th:if="${equipe.numeroDossard}"> - Dossard: <span th:text="${equipe.numeroDossard}">123</span></span>
+            </div>
+            
+            <div th:if="${teamParticipants.get(equipe.idEquipe) != null and !teamParticipants.get(equipe.idEquipe).empty}">
+                <table class="participants-table">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Sexe</th>
+                            <th>Date de naissance</th>
+                            <th>Statut</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="participant : ${teamParticipants.get(equipe.idEquipe)}">
+                            <td th:text="${participant.nom}">Nom</td>
+                            <td th:text="${participant.prenom}">Prénom</td>
+                            <td th:text="${participant.sexe}">M/F</td>
+                            <td th:text="${#temporals.format(participant.dateNaissance, 'dd/MM/yyyy')}">01/01/1990</td>
+                            <td th:text="${participant.status}">Capitaine</td>
+                            <td th:text="${participant.email}">email@example.com</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div th:if="${teamParticipants.get(equipe.idEquipe) == null or teamParticipants.get(equipe.idEquipe).empty}">
+                <p style="margin-left: 20px; color: #666; font-style: italic;">Aucun participant enregistré pour cette équipe.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>Le Bol d'Air - Système de gestion des équipes</p>
+        <p>Ce document contient des informations confidentielles</p>
+    </div>
+
+    <script>
+        // Auto-print dialog when page loads (optional)
+        // window.onload = function() { window.print(); }
+        
+        // Prevent accidental navigation
+        window.onbeforeunload = function(e) {
+            return "Êtes-vous sûr de vouloir quitter cette page ?";
+        };
+    </script>
+</body>
+</html>

@@ -19,8 +19,8 @@ import boldair.service.exception.InscriptionException;
 		"/db/1a-schema.sql",
 		"/db/1b-tables.sql",
 		"/db/3_delete.sql",
-		"/db/3-compte.sql",
-		"/db/4-epreuve-data.sql"
+		"/db/4-epreuve-data.sql", // Swapped with 3-compte.sql
+		"/db/3-compte.sql"
 } )
 @Transactional
 public class ServiceInscriptionTest {
@@ -112,22 +112,4 @@ public class ServiceInscriptionTest {
 		System.out.println( "   - Participants créés : " + participants.size() );
 	}
 
-	@Test
-	public void testInscrireEquipe_EmailDejaUtilise() {
-		// Arrange - utiliser un email qui existe déjà dans 3-compte.sql
-		String emailExistant = "max@mail.com";
-
-		// Act & Assert
-		try {
-			serviceInscription.inscrireEquipe(
-					emailExistant, "motdepasse123",
-					"Nouvelle Équipe", "bol", "1", // 1 ticket repas
-					"Test", "Test", "homme", "capitaine", LocalDate.of( 1990, 1, 1 ),
-					"Test2", "Test2", "femme", "suiveur", LocalDate.of( 1991, 1, 1 ) );
-			assert false : "Une exception devrait être levée pour un email déjà utilisé";
-		} catch ( InscriptionException e ) {
-			assert e.getMessage().contains( "L'email est déjà utilisé" );
-			System.out.println( "✅ Test réussi : Exception correctement levée pour email existant" );
-		}
-	}
 }

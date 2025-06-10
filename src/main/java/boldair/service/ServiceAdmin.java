@@ -75,6 +75,20 @@ public class ServiceAdmin {
     public List<Participant> getTeamParticipants(Long teamId) {
         return daoParticipant.findByIdEquipe(teamId);
     }
+    
+    /**
+     * Obtient les participants par email
+     */
+    public List<Participant> getParticipantsByEmail(String email) {
+        return daoParticipant.findByEmail(email);
+    }
+    
+    /**
+     * Obtient une équipe par son ID
+     */
+    public Equipe getTeamById(Long teamId) {
+        return daoEquipe.findById(teamId).orElse(null);
+    }
 
     /**
      * Obtient le compte associé à un bénévole

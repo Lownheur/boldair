@@ -346,12 +346,11 @@
             
             <div class="row mb-4">
                 <div class="col-4">
-                    <div class="card">
-                        <div class="user-profile text-center">
+                    <div class="card">                        <div class="user-profile text-center">
                             <div class="user-avatar">
                                 <span class="user-icon">👤</span>
                             </div>
-                            <h2 class="user-name">Jean Dupont</h2>
+                            <h2 class="user-name" th:text="${compte != null ? compte.pseudo : 'Utilisateur'}">Jean Dupont</h2>
                             <p class="user-category">Participant - Bol d'Air</p>
                         </div>
                         
@@ -414,49 +413,22 @@
                             <button class="tab-btn">Confirmation</button>
                         </div>
                         
-                        <div class="tab-content">
-                            <h3>Votre équipe</h3>
+                        <div class="tab-content">                            <h3>Votre équipe</h3>
                             
-                            <div class="team-section mb-4">
+                            <div class="team-section mb-4" th:if="${equipe != null}">
                                 <div class="team-header">
-                                    <div class="team-title">Équipe "Les Foulées Vertes"</div>
-                                    <div class="team-category">Catégorie : Mixte</div>
+                                    <div class="team-title" th:text="'Équipe &quot;' + ${equipe.nomEquipe} + '&quot;'">Équipe "Les Foulées Vertes"</div>
+                                    <div class="team-category" th:text="'Catégorie : ' + ${equipe.categorie}">Catégorie : Mixte</div>
                                 </div>
                                 
-                                <div class="team-members">
-                                    <div class="team-member">
+                                <div class="team-members" th:if="${participants != null and !participants.isEmpty()}">
+                                    <div class="team-member" th:each="participant, iterStat : ${participants}">
                                         <div class="user-avatar sm">
                                             <span class="user-icon sm">👤</span>
                                         </div>
                                         <div class="member-info">
-                                            <div class="member-name">Jean Dupont</div>
-                                            <div class="member-role">Capitaine</div>
-                                        </div>
-                                        <div class="member-status">
-                                            <span class="badge badge-warning">Certificat en attente</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="team-member">
-                                        <div class="user-avatar sm">
-                                            <span class="user-icon sm">👤</span>
-                                        </div>
-                                        <div class="member-info">
-                                            <div class="member-name">Sophie Martin</div>
-                                            <div class="member-role">Membre</div>
-                                        </div>
-                                        <div class="member-status">
-                                            <span class="badge badge-success">Confirmé</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="team-member">
-                                        <div class="user-avatar sm">
-                                            <span class="user-icon sm">👤</span>
-                                        </div>
-                                        <div class="member-info">
-                                            <div class="member-name">Luc Petit</div>
-                                            <div class="member-role">Membre</div>
+                                            <div class="member-name" th:text="${participant.prenom + ' ' + participant.nom}">Nom Participant</div>
+                                            <div class="member-role" th:text="${iterStat.index == 0 ? 'Capitaine' : 'Membre'}">Membre</div>
                                         </div>
                                         <div class="member-status">
                                             <span class="badge badge-success">Confirmé</span>
@@ -465,30 +437,37 @@
                                 </div>
                             </div>
                             
-                            <form class="form">
+                            <div th:if="${equipe == null}" class="info-box" style="background-color: var(--light-yellow);">
+                                <div class="info-icon">⚠️</div>
+                                <div class="info-content">
+                                    <strong>Aucune équipe trouvée</strong>
+                                    <p>Vous n'êtes inscrit dans aucune équipe pour le moment.</p>
+                                </div>
+                            </div>
+                              <form class="form" th:if="${equipe != null}">
                                 <h4>Modifier les informations de l'équipe</h4>
                                 
                                 <div class="form-group">
                                     <label for="team-name" class="form-label">Nom de l'équipe</label>
-                                    <input type="text" id="team-name" class="form-input" value="Les Foulées Vertes">
+                                    <input type="text" id="team-name" class="form-input" th:value="${equipe.nomEquipe}">
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="team-category" class="form-label">Catégorie</label>
                                     <select id="team-category" class="form-select">
-                                        <option value="mixte" selected>Mixte</option>
-                                        <option value="homme">Hommes</option>
-                                        <option value="femme">Femmes</option>
+                                        <option value="mixte" th:selected="${equipe.categorie == 'mixte'}">Mixte</option>
+                                        <option value="homme" th:selected="${equipe.categorie == 'homme'}">Hommes</option>
+                                        <option value="femme" th:selected="${equipe.categorie == 'femme'}">Femmes</option>
                                     </select>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="team-level" class="form-label">Niveau estimé</label>
                                     <select id="team-level" class="form-select">
-                                        <option value="débutant">Débutant</option>
-                                        <option value="intermédiaire" selected>Intermédiaire</option>
-                                        <option value="confirmé">Confirmé</option>
-                                        <option value="expert">Expert</option>
+                                        <option value="débutant" th:selected="${equipe.niveau == 'débutant'}">Débutant</option>
+                                        <option value="intermédiaire" th:selected="${equipe.niveau == 'intermédiaire'}">Intermédiaire</option>
+                                        <option value="confirmé" th:selected="${equipe.niveau == 'confirmé'}">Confirmé</option>
+                                        <option value="expert" th:selected="${equipe.niveau == 'expert'}">Expert</option>
                                     </select>
                                 </div>
                                 

@@ -933,3 +933,143 @@ main .container {
 .text-muted {
   color: var(--dark-gray) !important;
 }
+
+/* ==========================================
+   MENU HAMBURGER POUR MOBILE
+   ========================================== */
+
+/* Bouton hamburger - caché par défaut sur desktop */
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  z-index: 1001;
+}
+
+.hamburger-line {
+  width: 20px;
+  height: 2px;
+  background-color: var(--white);
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+/* Animation du hamburger quand il est actif */
+.hamburger-active .hamburger-line:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-active .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-active .hamburger-line:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Styles responsive pour le menu hamburger */
+@media (max-width: 768px) {
+  /* Afficher le bouton hamburger */
+  .hamburger-menu {
+    display: flex;
+  }
+  
+  /* Cacher le menu par défaut sur mobile */
+  .nav-menu {
+    position: fixed;
+    top: var(--header-height);
+    right: -100%;
+    width: 280px;
+    height: calc(100vh - var(--header-height));
+    background-color: var(--primary-color);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px;
+    gap: 15px;
+    transition: right 0.3s ease;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    overflow-y: auto;
+  }
+  
+  /* Quand le menu est ouvert */
+  .nav-menu.nav-menu-open {
+    right: 0;
+  }
+  
+  /* Styles des liens dans le menu mobile */
+  .nav-menu li {
+    width: 100%;
+  }
+  
+  .nav-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 12px 15px;
+    margin: 0;
+    border: 2px solid var(--white);
+    border-radius: var(--border-radius);
+    font-size: 14px;
+    transition: all 0.3s ease;
+  }
+  
+  .nav-btn:hover,
+  .nav-btn.active {
+    background-color: var(--white);
+    color: var(--primary-color);
+  }
+  
+  /* Bouton de déconnexion dans le menu mobile */
+  .logout-btn {
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .logout-btn form {
+    width: 100%;
+  }
+  
+  .logout-btn .btn {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 14px;
+    border-radius: var(--border-radius);
+  }
+}
+
+/* Pour les très petits écrans */
+@media (max-width: 480px) {
+  .nav-menu {
+    width: 250px;
+  }
+  
+  .hamburger-menu {
+    width: 25px;
+    height: 25px;
+  }
+  
+  .hamburger-line {
+    width: 18px;
+  }
+}
+
+/* Overlay pour fermer le menu quand on clique à côté */
+@media (max-width: 768px) {
+  .nav-menu.nav-menu-open::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: -1;
+  }
+}

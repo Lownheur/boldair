@@ -58,14 +58,39 @@ public class WebCompte {
 	public Paging getPaging(@ModelAttribute("pagingCompte") Paging paging) {
 		return paging;
 	}
-
 	// -------
 	// User and Admin Dashboards
 	// -------
-
+	
 	@GetMapping("/utilisateur")
 	@RolesAllowed("USER")
-	public String userDashboard() {
+	public String userDashboard(Model model) {
+		// Get the current authenticated user
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String username = auth.getName();
+		
+		// Find the compte by username (pseudo)
+		Compte compte = daoCompte.findByPseudo(username);
+		
+		// Find the equipe by searching participants with the same email as the compte
+		Equipe equipe = null;
+		List<boldair.data.Participant> participants = null;
+		
+		if (compte != null) {
+			// Get participants by email to find the team
+			participants = serviceAdmin.getParticipantsByEmail(compte.getEmail());
+			if (participants != null && !participants.isEmpty()) {
+				// Get the team of the first participant (they should all be in the same team)
+				Long teamId = participants.get(0).getIdEquipe();
+				equipe = serviceAdmin.getTeamById(teamId);
+			}
+		}
+		
+		// Add data to the model
+		model.addAttribute("compte", compte);
+		model.addAttribute("equipe", equipe);
+		model.addAttribute("participants", participants);
+		
 		return "compte/utilisateur";
 	}
 
@@ -132,6 +157,55 @@ public class WebCompte {
 		}
 		
 		return "compte/admin-equipes";
+	}
+	
+	// -------
+	// Export endpoints
+	// -------
+	
+	@GetMapping("/admin/benevoles/export")
+	@RolesAllowed("ADMIN")
+	public String exportBenevoles(Model model) {
+		List<Benevol> volunteers = serviceAdmin.getAllVolunteers();
+		List<Role> allRoles = serviceAdmin.getAllRoles();
+		
+		// Create a map of volunteer roles for easy access in template
+		Map<Long, Role> volunteerRoles = new HashMap<>();
+		for (Benevol volunteer : volunteers) {
+			if (volunteer.getIdRole() != null) {
+				Role role = daoRole.findById(volunteer.getIdRole()).orElse(null);
+				if (role != null) {
+					volunteerRoles.put(volunteer.getIdBenevol(), role);
+				}
+			}
+		}
+		
+		model.addAttribute("volunteers", volunteers);
+		model.addAttribute("volunteerCount", volunteers.size());
+		model.addAttribute("volunteerRoles", volunteerRoles);
+		model.addAttribute("exportDate", java.time.LocalDateTime.now());
+		
+		return "compte/export-benevoles";
+	}
+	
+	@GetMapping("/admin/equipes/export")
+	@RolesAllowed("ADMIN")
+	public String exportEquipes(Model model) {
+		List<Equipe> teams = serviceAdmin.getAllTeams();
+		
+		// Get participants for each team
+		Map<Long, List<boldair.data.Participant>> teamParticipants = new HashMap<>();
+		for (Equipe team : teams) {
+			List<boldair.data.Participant> participants = serviceAdmin.getTeamParticipants(team.getIdEquipe());
+			teamParticipants.put(team.getIdEquipe(), participants);
+		}
+		
+		model.addAttribute("teams", teams);
+		model.addAttribute("teamCount", teams.size());
+		model.addAttribute("teamParticipants", teamParticipants);
+		model.addAttribute("exportDate", java.time.LocalDateTime.now());
+		
+		return "compte/export-equipes";
 	}
 	
 	@GetMapping("/benevol")

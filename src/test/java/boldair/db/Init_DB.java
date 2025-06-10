@@ -26,9 +26,9 @@ public class Init_DB {
 	@Test
 	@Sql( {
 			"/db/3_delete.sql",
-			"/db/3-compte.sql",
-			"/db/4-epreuve-data.sql",
-			"/db/5-roles.sql",
+			"/db/4-epreuve-data.sql", // Moved up to ensure epreuve data exists
+			"/db/5-roles.sql",        // Moved up as good practice
+			"/db/3-compte.sql",       // Now runs after epreuve and roles data is populated
 	} )
 	void db_3_Data() {
 	}

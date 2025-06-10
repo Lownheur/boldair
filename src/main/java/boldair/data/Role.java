@@ -8,10 +8,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+// @Data génère automatiquement les getters, setters, toString(), equals() et hashCode()
 @Data
+// @NoArgsConstructor génère un constructeur sans paramètres (constructeur par défaut)
 @NoArgsConstructor
+// @AllArgsConstructor génère un constructeur avec tous les champs en paramètres
 @AllArgsConstructor
+// @EqualsAndHashCode définit que l'égalité entre deux objets Role se base uniquement sur le champ idRoles
+// Deux objets Role sont considérés égaux s'ils ont le même idRoles
 @EqualsAndHashCode(of = {"idRoles"})
+// @Table spécifie le nom de la table dans la base de données (ici "roles")
+// Spring Data JDBC utilise cette annotation pour mapper la classe à la table
 @Table("roles")
 public class Role {
       @Id

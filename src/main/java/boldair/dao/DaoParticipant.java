@@ -9,5 +9,7 @@ import boldair.data.Participant;
 public interface DaoParticipant extends CrudRepository<Participant, Long> {
 
 	List<Participant> findByIdEquipe( Long idEquipe );
+	
+	List<Participant> findByEmail(String email);
 
 }
